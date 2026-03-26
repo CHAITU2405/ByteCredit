@@ -7,32 +7,76 @@
     <title>Byte Credits | Central Hub</title>
     <style>
         :root {
-            --platinum: #efefefff;
-            --ash-grey: #a9b2acff;
-            --shadow-grey: #221d23ff;
-            --grey-olive: #898980ff;
-            --tea-green: #c5dac1ff;
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
 
-            --bg-main: var(--platinum);
-            --text-main: var(--shadow-grey);
-            --text-muted: var(--grey-olive);
-            --border-color: var(--ash-grey);
-            --primary: var(--tea-green);
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --border-color: rgba(15, 23, 42, 0.1);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --border-color: rgba(255, 255, 255, 0.1);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-main);
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
             min-height: 100vh;
             color: var(--text-main);
             overflow-x: hidden;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* --- NAVBAR --- */
@@ -41,12 +85,17 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            background: var(--bg-main);
-            border-bottom: 1px solid var(--border-color);
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .logo {
@@ -54,20 +103,42 @@
             font-weight: 900;
             letter-spacing: 2px;
             cursor: pointer;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         /* Nav Links Area */
         .nav-items {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-link {
             text-decoration: none;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 700;
             font-size: 0.95rem;
             transition: 0.3s;
         }
@@ -90,26 +161,30 @@
         }
 
         .btn-login {
-            background: transparent;
-            border: 2px solid var(--border-color);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .btn-login:hover {
-            background: rgba(169, 178, 172, 0.2);
-            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            background: rgba(15, 23, 42, 0.05);
         }
+        body.dark-mode .btn-login:hover { background: rgba(255, 255, 255, 0.05); }
 
         .btn-register {
             background: var(--primary);
             border: none;
-            color: var(--text-main);
-            transition: 0.3s;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .btn-register:hover {
             transform: translateY(-2px);
-            background: var(--border-color);
+            background: var(--indigo-500);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
         /* --- HERO SECTION --- */
@@ -200,9 +275,9 @@
         }
 
         .card {
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(34, 29, 35, 0.08);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
             border-radius: 20px;
             padding: 35px;
             text-decoration: none;
@@ -213,12 +288,16 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 250px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .card:hover {
             transform: translateY(-5px);
-            border-color: var(--text-muted);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
         }
+        body.dark-mode .card:hover { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
 
         .card-icon {
             font-size: 3rem;
@@ -246,7 +325,7 @@
             text-align: center;
             color: var(--text-muted);
             font-size: 0.9rem;
-            background: var(--bg-main);
+            background: transparent;
             margin-top: auto;
         }
 
@@ -291,7 +370,10 @@
 <body>
 
     <nav>
-        <div class="logo" onclick="window.scrollTo(0,0)">BYTE CREDITS</div>
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <div class="logo" onclick="window.scrollTo(0,0)">BYTE CREDITS</div>
+        </div>
 
         <div class="nav-items">
             <a href="#hub" class="nav-link">Modules</a>
@@ -379,6 +461,31 @@
     </footer>
 
     <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
         // Simple Reveal on Scroll
         window.addEventListener('scroll', reveal);
 
