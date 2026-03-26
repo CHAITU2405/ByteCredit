@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Take Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+
+            --success: #16a34a;
+            --danger: #ef4444;
+            --warning: #ca8a04;
+
+            --success-bg: rgba(22, 163, 74, 0.1);
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            
+            --pulse-color: rgba(99, 102, 241, 0.7);
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+
+            --success: #4ade80;
+            --danger: #f87171;
+            --warning: #facc15;
+            
+            --success-bg: rgba(74, 222, 128, 0.1);
+            --danger-bg: rgba(248, 113, 113, 0.1);
+
+            --pulse-color: rgba(99, 102, 241, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding-bottom: 50px;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 var(--pulse-color); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 30px;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* --- GLASS PANEL --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: fit-content;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .glass-panel h2 {
+            color: var(--text-main);
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 12px;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- LEFT COLUMN: CONTROLS --- */
+        .control-group label {
+            display: block;
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        .control-group input:disabled, 
+        .control-group select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(15, 23, 42, 0.05);
+        }
+        body.dark-mode .control-group input:disabled,
+        body.dark-mode .control-group select:disabled {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .status-text {
+            color: var(--text-muted);
+        }
+
+        /* Active State Classes */
+        .status-active .status-dot {
+            background: var(--primary);
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        .status-active .status-text {
+            color: var(--primary);
+        }
+
+        .status-stopped .status-dot {
+            background: var(--danger);
+        }
+
+        .status-stopped .status-text {
+            color: var(--danger);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-control {
+            padding: 18px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.6;
+            pointer-events: none;
+            /* Disabled by default */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-start {
+            background: var(--primary);
+            color: #ffffff;
+            opacity: 1;
+            pointer-events: all;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-start:hover {
+            background: var(--indigo-500);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-stop {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            box-shadow: none;
+        }
+
+        .btn-stop.active {
+            background: var(--danger);
+            color: #ffffff;
+            opacity: 1;
+            pointer-events: all;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-stop.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-submit {
+            background: var(--success);
+            color: #ffffff;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-submit.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .btn-submit.active:hover {
+            transform: translateY(-3px);
+            background: #15803d;
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+        }
+
+
+        /* --- RIGHT COLUMN: LIVE FEED --- */
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .feed-header h2 {
+            border-bottom: none;
+            padding-bottom: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .count-badge {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .student-list {
+            height: 550px;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Custom Scrollbar */
+        .student-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb {
+            background: var(--slate-400);
+            border-radius: 4px;
+        }
+
+        .student-item {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeInUp 0.3s ease-out;
+            transition: 0.3s;
+        }
+
+        .student-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+
+        .st-id {
+            font-family: 'ui-monospace', monospace;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .st-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .st-status {
+            color: var(--success);
+            font-size: 1.4rem;
+            font-weight: 900;
+        }
+
+        .student-item.unknown {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .student-item.unknown .st-status {
+            color: var(--warning);
+        }
+
+        .st-uid {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'ui-monospace', monospace;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        #wedgeWrap {
+            display: none;
+        }
+
+        #wedgeWrap.visible {
+            display: block;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        #wedgeHint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding-top: 180px;
+            font-style: italic;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="anim">
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a href="{{ dashboard_href }}" class="logo">BYTE CREDITS</a>
+        </div>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+            <a href="{{ url_for('view_attendance') }}" class="back-btn">View attendance log</a>
+            <a href="{{ dashboard_href }}" class="back-btn">← Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="glass-panel">
+            <h2>Session Configuration</h2>
+
+            <div class="control-group">
+                <label>Reader Source</label>
+                <select id="readerSource">
+                    <option value="external">External RFID Reader (USB/BT)</option>
+                    <option value="inbuilt">Inbuilt Device Reader (NFC/Cam)</option>
+                </select>
+            </div>
+
+            {% if not attendance_classes %}
+            <p style="color:var(--danger);font-size:0.95rem;font-weight:600;margin-bottom:8px;">No classes yet. Ask an admin to create a class (roster Excel) in the admin dashboard.</p>
+            {% endif %}
+
+            <div class="control-group">
+                <label>Class (from admin)</label>
+                <select id="classSelect" {% if not attendance_classes %}disabled{% endif %}>
+                    <option value="" disabled selected>Select Class</option>
+                    {% for c in attendance_classes %}
+                    <option value="{{ c.name_key }}" data-sem="{{ c.semester_no }}">{{ c.display_name }} (Sem {{ c.semester_no }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Session date</label>
+                <input type="date" id="sessionDate" value="{{ session_date_default }}">
+                <p style="font-size:0.8rem;color:var(--text-muted);font-weight:500;margin-top:8px;">Attendance for each period can only be submitted once per class per day.</p>
+            </div>
+
+            <div class="control-group">
+                <label>Period</label>
+                <select id="periodSelect">
+                    <option value="1">1 (09:00 - 09:50)</option>
+                    <option value="2">2 (09:50 - 10:40)</option>
+                    <option value="3">3 (10:50 - 11:40)</option>
+                    <option value="4">4 (11:40 - 12:30)</option>
+                    <option value="5">5 (01:30 - 02:20)</option>
+                    <option value="6">6 (02:20 - 03:10)</option>
+                    <option value="7">7 (03:10 - 04:00)</option>
+                    <option value="8">8 (04:00 - 04:50)</option>
+                    <option value="9">9 (Lab / Extra)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                    <input type="checkbox" id="continuousPeriods" style="width:20px;height:20px;accent-color:var(--primary);cursor:pointer;flex-shrink:0;">
+                    Continuous periods (same attendance)
+                </label>
+                <div id="periodRangeWrap" style="display:none;margin-top:12px;padding:15px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;">
+                    <label style="font-size:0.8rem;margin-bottom:8px;display:block;">End period</label>
+                    <select id="periodEndSelect"></select>
+                    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:8px;font-weight:500;">
+                        Attendance will be saved for every period from <strong>start</strong> to <strong>end</strong> (inclusive).
+                    </p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Subject</label>
+                <select id="subjectSelect">
+                    {% for s in attendance_subjects %}
+                    <option value="{{ s.key }}" data-sem="{{ s.semester_no }}">{{ s.name }} (Sem {{ s.semester_no }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div id="wedgeWrap" class="control-group">
+                <label>USB reader — focus here</label>
+                <input type="text" id="wedgeInput" autocomplete="off" autocorrect="off" spellcheck="false"
+                    placeholder="Reader will type UID, then Enter">
+                <p id="wedgeHint">Many USB RFID scanners act as a keyboard: click this box, then scan. UID appears and logs on Enter.</p>
+            </div>
+
+            <div id="statusBox" class="status-indicator">
+                <div class="status-dot"></div>
+                <div class="status-text">Reader Idle</div>
+            </div>
+
+            <div class="btn-group">
+                <button id="btnStart" class="btn-control btn-start" onclick="startAttendance()">Start
+                    Attendance</button>
+                <button id="btnStop" class="btn-control btn-stop" onclick="stopAttendance()">Stop Reader</button>
+                <button id="btnSubmit" class="btn-control btn-submit" onclick="submitAttendance()">Submit Log</button>
+            </div>
+        </div>
+
+        <div class="glass-panel" style="height: 750px;">
+            <div class="feed-header">
+                <h2>Live Attendance Log</h2>
+                <div class="count-badge">Count: <span id="countDisplay">0</span></div>
+            </div>
+
+            <div class="student-list" id="studentList">
+                <div class="empty-state">
+                    Waiting for reader to start...<br>
+                    Marked roll numbers will appear here.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        // --- Core Attendance JS ---
+        const LOOKUP_URL = {{ url_for('api_attendance_lookup') | tojson }};
+        const SUBMIT_URL = {{ url_for('api_attendance_submit') | tojson }};
+        const SESSION_CHECK_URL = {{ url_for('api_attendance_session_check') | tojson }};
+        const PERIOD_OPTIONS_URL = {{ url_for('api_attendance_period_options') | tojson }};
+        const HAS_CLASSES = {{ (attendance_classes|length > 0)|tojson }};
+
+        let isScanning = false;
+        let studentCount = 0;
+        const seenUids = new Set();
+        const attendanceEntries = [];
+
+        const statusBox = document.getElementById('statusBox');
+        const statusText = statusBox.querySelector('.status-text');
+        const btnStart = document.getElementById('btnStart');
+        const btnStop = document.getElementById('btnStop');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const studentList = document.getElementById('studentList');
+        const countDisplay = document.getElementById('countDisplay');
+        const inputs = document.querySelectorAll('select');
+        const readerSource = document.getElementById('readerSource');
+        const wedgeWrap = document.getElementById('wedgeWrap');
+        const wedgeInput = document.getElementById('wedgeInput');
+        const sessionDateEl = document.getElementById('sessionDate');
+        const classSelectEl = document.getElementById('classSelect');
+        const subjectSelectEl = document.getElementById('subjectSelect');
+        const periodSelectEl = document.getElementById('periodSelect');
+        const continuousPeriodsEl = document.getElementById('continuousPeriods');
+        const periodRangeWrapEl = document.getElementById('periodRangeWrap');
+        const periodEndSelectEl = document.getElementById('periodEndSelect');
+
+        let ndefReader = null;
+        let refreshingPeriods = false;
+        let lastPeriodOptions = [];
+
+        if (!HAS_CLASSES) {
+            btnStart.style.opacity = '0.5';
+            btnStart.style.pointerEvents = 'none';
+        }
+
+        function unlockSessionControls() {
+            btnStart.style.opacity = HAS_CLASSES ? '1' : '0.5';
+            btnStart.style.pointerEvents = HAS_CLASSES ? 'all' : 'none';
+            inputs.forEach((input) => { input.disabled = false; });
+            if (sessionDateEl) sessionDateEl.disabled = false;
+        }
+
+        function normalizeUid(u) {
+            return String(u || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        }
+
+        function syncSubjectsToClassSemester() {
+            if (!subjectSelectEl || !classSelectEl) return;
+            const hasClass = !!classSelectEl.value;
+            const copt = classSelectEl.selectedOptions[0];
+            const semStr = copt ? copt.getAttribute('data-sem') : null;
+            const semNum = semStr != null && semStr !== '' ? parseInt(semStr, 10) : NaN;
+            let firstVisible = null;
+            Array.from(subjectSelectEl.options).forEach((opt) => {
+                const os = opt.getAttribute('data-sem');
+                const osem = os != null && os !== '' ? parseInt(os, 10) : NaN;
+                if (!hasClass || Number.isNaN(semNum)) {
+                    opt.hidden = false;
+                } else {
+                    opt.hidden = Number.isNaN(osem) || osem !== semNum;
+                }
+                if (!opt.hidden && firstVisible == null) firstVisible = opt;
+            });
+            if (subjectSelectEl.selectedOptions.length && subjectSelectEl.selectedOptions[0].hidden && firstVisible) {
+                subjectSelectEl.value = firstVisible.value;
+            }
+        }
+
+        async function refreshPeriodAvailability() {
+            if (!periodSelectEl) return;
+            if (isScanning) return;
+            const cls = classSelectEl ? classSelectEl.value : '';
+            const sd = sessionDateEl ? sessionDateEl.value : '';
+            if (!cls || !sd) return;
+
+            refreshingPeriods = true;
+            try {
+                const u = new URL(PERIOD_OPTIONS_URL, window.location.origin);
+                u.searchParams.set('class_key', cls);
+                u.searchParams.set('session_date', sd);
+                const r = await fetch(u.toString(), { credentials: 'same-origin' });
+                const d = await r.json().catch(() => ({}));
+                if (!r.ok || !d.ok || !Array.isArray(d.periods)) {
+                    throw new Error('period options unavailable');
+                }
+                periodSelectEl.innerHTML = '';
+                lastPeriodOptions = d.periods || [];
+                lastPeriodOptions.forEach((p) => {
+                    const opt = document.createElement('option');
+                    opt.value = String(p.period || '');
+                    opt.disabled = !!p.taken;
+                    const display = String(p.label || p.period || '');
+                    opt.textContent = p.taken ? `${display} (Taken)` : display;
+                    periodSelectEl.appendChild(opt);
+                });
+                const options = Array.from(periodSelectEl.options || []);
+                const firstAvailable = options.find((o) => !o.disabled);
+                if (firstAvailable) periodSelectEl.value = firstAvailable.value;
+                if (periodEndSelectEl) periodEndSelectEl.value = periodSelectEl.value;
+                const hasOpenPeriod = !!firstAvailable;
+                if (!hasOpenPeriod) {
+                    btnStart.style.opacity = '0.5';
+                    btnStart.style.pointerEvents = 'none';
+                    statusText.innerText = 'All periods already completed for selected class/date';
+                } else if (!isScanning) {
+                    btnStart.style.opacity = HAS_CLASSES ? '1' : '0.5';
+                    btnStart.style.pointerEvents = HAS_CLASSES ? 'all' : 'none';
+                    statusText.innerText = 'Reader Idle';
+                }
+            } catch (e) {
+                // If Excel read fails, keep current options unchanged.
+            } finally {
+                refreshingPeriods = false;
+            }
+
+            // Sync end-period selector options
+            if (periodEndSelectEl) {
+                periodEndSelectEl.innerHTML = '';
+                Array.from(periodSelectEl.options || []).forEach((o) => {
+                    const opt = document.createElement('option');
+                    opt.value = o.value;
+                    opt.textContent = o.textContent;
+                    opt.disabled = o.disabled;
+                    periodEndSelectEl.appendChild(opt);
+                });
+                periodEndSelectEl.value = periodSelectEl.value;
+            }
+        }
+
+        function getSelectedPeriods() {
+            const start = parseInt(periodSelectEl ? periodSelectEl.value : '', 10);
+            if (!Number.isFinite(start)) return [];
+            const cont = !!(continuousPeriodsEl && continuousPeriodsEl.checked);
+            if (!cont) return [String(start)];
+            const end = parseInt(periodEndSelectEl ? periodEndSelectEl.value : '', 10);
+            if (!Number.isFinite(end)) return [String(start)];
+            const lo = Math.min(start, end);
+            const hi = Math.max(start, end);
+            const out = [];
+            for (let p = lo; p <= hi; p++) out.push(String(p));
+            return out;
+        }
+
+        function validateContinuousPeriods(periods) {
+            const takenMap = new Map((lastPeriodOptions || []).map(p => [String(p.period || ''), !!p.taken]));
+            const bad = periods.find(p => takenMap.get(String(p)) === true);
+            return bad ? { ok: false, period: bad } : { ok: true };
+        }
+
+        function appendRow(rollDisplay, subline, uidLine, ok) {
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = 'student-item' + (ok ? '' : ' unknown');
+            div.innerHTML = `
+                <div>
+                    <div class="st-id">${rollDisplay}</div>
+                    <div class="st-time">Scanned at ${time}</div>
+                    ${uidLine ? `<div class="st-uid">${uidLine}</div>` : ''}
+                    ${subline ? `<div class="st-uid">${subline}</div>` : ''}
+                </div>
+                <div class="st-status">${ok ? '✔' : '?'}</div>
+            `;
+            studentList.prepend(div);
+        }
+
+        async function recordScan(rawUid) {
+            if (!isScanning || !rawUid) return;
+            const norm = normalizeUid(rawUid);
+            if (!norm) return;
+            if (seenUids.has(norm)) {
+                statusText.innerText = 'Duplicate tap ignored';
+                setTimeout(() => {
+                    if (isScanning) statusText.innerText = readerSource.value === 'inbuilt'
+                        ? 'NFC active — hold card to phone'
+                        : 'USB reader — scan cards';
+                }, 1200);
+                return;
+            }
+            seenUids.add(norm);
+
+            try {
+                const res = await fetch(LOOKUP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ card_uid: rawUid.trim() }),
+                    credentials: 'same-origin',
+                });
+                const data = await res.json().catch(() => ({}));
+                if (data.ok && data.rollno) {
+                    studentCount++;
+                    countDisplay.innerText = studentCount;
+                    attendanceEntries.push({ rollno: data.rollno, card_uid: data.card_uid || rawUid });
+                    appendRow(data.rollno, data.name || '', 'UID: ' + (data.card_uid || rawUid), true);
+                } else {
+                    appendRow('Unknown card', data.error || 'Not registered', 'UID: ' + rawUid.trim(), false);
+                }
+            } catch (e) {
+                appendRow('Lookup failed', 'Network error', 'UID: ' + rawUid.trim(), false);
+            }
+        }
+
+        async function startNfcReader() {
+            if (typeof NDEFReader === 'undefined') {
+                alert('Web NFC not available. Use Chrome on Android, or switch to External RFID Reader.');
+                stopAttendance(true);
+                return;
+            }
+            try {
+                ndefReader = new NDEFReader();
+                await ndefReader.scan();
+                statusText.innerText = 'NFC active — hold card to phone';
+                ndefReader.onreading = (e) => {
+                    if (!isScanning) return;
+                    const serial = e.serialNumber || (e.tag && e.tag.serialNumber) || '';
+                    if (serial) recordScan(serial);
+                };
+            } catch (err) {
+                alert('NFC error: ' + (err.message || 'Permission denied'));
+                stopAttendance(true);
+            }
+        }
+
+        function onWedgeKeydown(e) {
+            if (!isScanning) return;
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const v = wedgeInput.value.trim();
+                wedgeInput.value = '';
+                if (v) recordScan(v);
+            }
+        }
+
+        async function startAttendance() {
+            if (refreshingPeriods) {
+                alert('Checking available periods, please wait a moment.');
+                return;
+            }
+            if (!HAS_CLASSES) {
+                alert('No classes available. Admin must create a class first.');
+                return;
+            }
+            const cls = document.getElementById('classSelect').value;
+            const periods = getSelectedPeriods();
+            const sd = sessionDateEl ? sessionDateEl.value : '';
+            if (!cls) {
+                alert('Please select a class first.');
+                return;
+            }
+            if (!sd) {
+                alert('Please set the session date.');
+                return;
+            }
+            if (!periods.length) {
+                alert('Please select a period.');
+                return;
+            }
+            const v = validateContinuousPeriods(periods);
+            if (!v.ok) {
+                alert('Selected period ' + v.period + ' is already completed. Choose an available range.');
+                return;
+            }
+            try {
+                for (const pd of periods) {
+                    const u = new URL(SESSION_CHECK_URL, window.location.origin);
+                    u.searchParams.set('class_key', cls);
+                    u.searchParams.set('period', pd);
+                    u.searchParams.set('session_date', sd);
+                    const r = await fetch(u.toString(), { credentials: 'same-origin' });
+                    const d = await r.json().catch(() => ({}));
+                    if (!r.ok) {
+                        alert(d.error || 'Could not verify session');
+                        return;
+                    }
+                    if (d.taken) {
+                        alert(d.message || ('Attendance already completed for period ' + pd));
+                        return;
+                    }
+                }
+            } catch (e) {
+                alert('Could not verify session. Check your connection.');
+                return;
+            }
+
+            isScanning = true;
+            statusBox.className = 'status-indicator status-active';
+            btnStart.style.opacity = '0.5';
+            btnStart.style.pointerEvents = 'none';
+            btnStop.classList.add('active');
+            btnSubmit.classList.remove('active');
+            inputs.forEach((input) => { input.disabled = true; });
+            if (sessionDateEl) sessionDateEl.disabled = true;
+
+            if (studentCount === 0 && attendanceEntries.length === 0) {
+                studentList.innerHTML = '';
+            }
+
+            const mode = readerSource.value;
+            wedgeWrap.classList.toggle('visible', mode === 'external');
+            if (mode === 'external') {
+                statusText.innerText = 'USB reader — tap field above, then scan cards';
+                wedgeInput.disabled = false;
+                setTimeout(() => wedgeInput.focus(), 100);
+                wedgeInput.removeEventListener('keydown', onWedgeKeydown);
+                wedgeInput.addEventListener('keydown', onWedgeKeydown);
+            } else {
+                statusText.innerText = 'Starting NFC…';
+                startNfcReader();
+            }
+        }
+
+        function stopAttendance(fromError) {
+            isScanning = false;
+            wedgeInput.removeEventListener('keydown', onWedgeKeydown);
+            wedgeInput.blur();
+            wedgeWrap.classList.remove('visible');
+            wedgeInput.disabled = true;
+
+            statusBox.className = 'status-indicator status-stopped';
+            statusText.innerText = fromError ? 'Reader stopped (fix issue or change mode)' : 'Reader stopped — you can submit or start again';
+            btnStop.classList.remove('active');
+            btnSubmit.classList.add('active');
+            unlockSessionControls();
+        }
+
+        async function submitAttendance() {
+            const cls = document.getElementById('classSelect').value;
+            const periods = getSelectedPeriods();
+            const sub = document.getElementById('subjectSelect').value;
+
+            if (attendanceEntries.length === 0) {
+                alert('No registered scans to submit. Stop the reader, then submit (unknown UIDs are not saved).');
+                return;
+            }
+
+            const sd = sessionDateEl ? sessionDateEl.value : '';
+            const pLabel = periods.length > 1 ? (periods[0] + '–' + periods[periods.length - 1]) : (periods[0] || '');
+            if (!confirm('Submit ' + attendanceEntries.length + ' present student(s)?\nClass: ' + cls + '\nDate: ' + sd + '\nPeriod: ' + pLabel + '\nSubject: ' + sub)) {
+                return;
+            }
+
+            try {
+                btnSubmit.textContent = 'Submitting...';
+                btnSubmit.disabled = true;
+
+                const res = await fetch(SUBMIT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        class_key: cls,
+                        periods: periods,
+                        subject_key: sub,
+                        session_date: sd,
+                        entries: attendanceEntries,
+                    }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (data.ok) {
+                    if (data.excel_url) {
+                        window.open(data.excel_url, '_blank');
+                    }
+                    alert('Saved ' + (data.saved || attendanceEntries.length) + ' record(s).'
+                        + (data.excel_url ? '\n\nExcel export opened in a new tab (date in file name; subject as column heading).' : ''));
+                    location.reload();
+                } else {
+                    alert(data.error || 'Save failed');
+                    btnSubmit.textContent = 'Submit Log';
+                    btnSubmit.disabled = false;
+                }
+            } catch (e) {
+                alert('Network error');
+                btnSubmit.textContent = 'Submit Log';
+                btnSubmit.disabled = false;
+            }
+        }
+
+        if (classSelectEl) {
+            classSelectEl.addEventListener('change', () => {
+                syncSubjectsToClassSemester();
+                refreshPeriodAvailability();
+            });
+        }
+        if (sessionDateEl) {
+            sessionDateEl.addEventListener('change', refreshPeriodAvailability);
+        }
+        if (continuousPeriodsEl) {
+            continuousPeriodsEl.addEventListener('change', () => {
+                if (periodRangeWrapEl) {
+                    periodRangeWrapEl.style.display = continuousPeriodsEl.checked ? 'block' : 'none';
+                }
+                if (periodEndSelectEl && periodSelectEl) {
+                    periodEndSelectEl.value = periodSelectEl.value;
+                }
+            });
+        }
+        if (periodSelectEl) {
+            periodSelectEl.addEventListener('change', () => {
+                if (continuousPeriodsEl && continuousPeriodsEl.checked && periodEndSelectEl) {
+                    periodEndSelectEl.value = periodSelectEl.value;
+                }
+            });
+        }
+        syncSubjectsToClassSemester();
+        refreshPeriodAvailability();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --sidebar-bg: rgba(255, 255, 255, 0.85);
+            --paper-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --sidebar-bg: rgba(15, 23, 42, 0.75);
+            --paper-bg: rgba(15, 23, 42, 0.9);
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        body { 
+            margin:0; 
+            color:var(--text-main); 
+            padding-bottom:60px; 
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        nav {
+            display:flex; justify-content:space-between; align-items:center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: 900; 
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            text-decoration: none; 
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .muted { color: var(--text-muted); font-weight: 600; }
+        
+        .wrap { max-width: 1180px; margin: 40px auto; padding: 0 20px; }
+        
+        .resume {
+            display:grid;
+            grid-template-columns: 360px minmax(0,1fr);
+            border-radius: 20px;
+            overflow:hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: 0.3s;
+        }
+
+        @media (max-width: 980px) { .resume { grid-template-columns: 1fr; } }
+
+        .sidebar {
+            background: var(--sidebar-bg);
+            padding: 40px 30px;
+            position: relative;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .paper {
+            background: var(--paper-bg);
+            padding: 50px 45px;
+        }
+
+        a { color: var(--text-main); text-decoration:none; font-weight: 700; transition: 0.2s;}
+        a:hover { color: var(--primary); }
+
+        .photo {
+            width: 160px; height: 160px; border-radius: 50%;
+            border: 5px solid var(--glass-bg);
+            outline: 3px solid var(--primary);
+            overflow:hidden; background:var(--sidebar-bg);
+            margin: 0 auto 20px auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .photo img { width:100%; height:100%; object-fit:cover; }
+
+        .side-name { text-align:center; font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px; margin: 0; color: var(--text-main); }
+        .side-role { text-align:center; margin-top: 8px; color: var(--text-muted); font-weight: 700; font-size: 1.05rem;}
+
+        .btn-pill {
+            display:block;
+            width: 100%;
+            margin: 25px auto 0 auto;
+            text-align:center;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: #ffffff !important;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        .btn-pill:hover { background: var(--indigo-500); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+
+        .side-block { margin-top: 30px; }
+        .side-title {
+            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--glass-border);
+            color: var(--text-main);
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 1rem;
+        }
+
+        .side-list { list-style:none; padding: 0; margin: 15px 0 0 0; }
+        .side-item { display:flex; gap: 12px; align-items:center; padding: 8px 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;}
+        .side-item strong { color: var(--text-main); font-weight: 800; }
+        .side-item .icon { font-size: 1.2rem; min-width: 25px; text-align: center; color: var(--primary); font-weight: 900; }
+
+        .edu-item { padding: 15px 0; border-top: 1px solid var(--glass-border); }
+        .edu-item:first-child { border-top: none; }
+        .edu-inst { color: var(--text-main); font-weight: 800; font-size: 1.05rem;}
+        .edu-sub { color: var(--text-muted); margin-top: 6px; font-size: 0.95rem; font-weight: 500;}
+
+        .bullet { margin-top: 12px; padding-left: 16px; color: var(--text-muted); font-weight: 500;}
+        .bullet li { margin: 8px 0; }
+
+        .paper h1 { margin: 0; font-size: 3rem; font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+        .paper .headline { font-size: 1.25rem; font-weight: 700; margin-top: 10px; color: var(--text-muted);}
+        
+        .paper h2 {
+            margin: 35px 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .paper h2::before {
+            content: "//";
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        .paper .para { white-space: pre-wrap; line-height: 1.6; font-size: 1.05rem; font-weight: 500; color: var(--text-main);}
+
+        .job { padding: 20px 0; border-top: 1px dashed var(--glass-border); }
+        .job:first-of-type { border-top:none; padding-top: 5px;}
+        .job-head { display:flex; justify-content:space-between; gap: 10px; flex-wrap:wrap; margin-bottom: 8px; }
+        .job-role { font-weight: 900; font-size: 1.15rem; color: var(--text-main);}
+        .job-org { font-weight: 800; color: var(--primary); }
+        .job-meta { font-weight: 700; color: var(--text-muted); font-size: 0.95rem;}
+        
+        .pill {
+            display:inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            margin: 0;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+        .pill-wrap { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
+
+        /* Printing adjustments */
+        @media print {
+            body { 
+                padding-bottom: 0; 
+                background: #ffffff !important; 
+                animation: none;
+                color: #000;
+            }
+            nav { display: none !important; }
+            .wrap { margin: 0; padding: 0; max-width: none; }
+            .resume { border: none; box-shadow: none; border-radius: 0; grid-template-columns: 320px 1fr; background: #ffffff !important; }
+            .sidebar { background: #f8fafc !important; border-right: 1px solid #e2e8f0; }
+            .paper { background: #ffffff !important; color: #000; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .side-item strong, .job-role, .edu-inst { color: #000 !important; }
+            .text-muted, .side-role, .edu-sub, .job-meta { color: #475569 !important; }
+            h2 { border-bottom-color: #cbd5e1 !important; }
+        }
+    </style>
+</head>
+<body>
+    {% if not print_mode %}
+    <nav>
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a class="logo" href="{{ url_for('landing') }}">BYTE CREDITS</a>
+        </div>
+        <span class="muted" style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Public profile</span>
+    </nav>
+    {% endif %}
+
+    <div class="wrap">
+        <div class="resume">
+            <aside class="sidebar">
+                <div class="photo">
+                    <img src="{% if photo_url %}{{ url_for('static', filename=photo_url) }}{% else %}https://via.placeholder.com/150{% endif %}" alt="Profile">
+                </div>
+                <h2 class="side-name">{{ name }}</h2>
+                <div class="side-role">{{ department }} • Year {{ year }}</div>
+                
+                {% if tagline %}
+                <div style="text-align:center;color:var(--text-main);margin-top:15px;line-height:1.5;font-weight:600;font-size:1.05rem;">{{ tagline }}</div>
+                {% endif %}
+                
+                <a class="btn-pill" href="{% if print_mode %}#{% else %}mailto:{{ email }}{% endif %}">Contact Me</a>
+
+                <div class="side-block">
+                    <ul class="side-list">
+                        <li class="side-item"><span class="icon">#</span> <div><strong>{{ rollno }}</strong></div></li>
+                        {% if location %}<li class="side-item"><span class="icon">📍</span> <div>{{ location }}</div></li>{% endif %}
+                        {% if linkedin %}<li class="side-item"><span class="icon">📄</span> <div><a href="{{ linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></div></li>{% endif %}
+                        {% if github %}<li class="side-item"><span class="icon">💻</span> <div><a href="{{ github }}" target="_blank" rel="noopener noreferrer">GitHub</a></div></li>{% endif %}
+                        {% if portfolio %}<li class="side-item"><span class="icon">🌐</span> <div><a href="{{ portfolio }}" target="_blank" rel="noopener noreferrer">Portfolio</a></div></li>{% endif %}
+                    </ul>
+                </div>
+
+                {% if education_list %}
+                <div class="side-block">
+                    <div class="side-title">Education</div>
+                    {% for ed in education_list %}
+                    <div class="edu-item">
+                        <div class="edu-inst">{{ ed.get('institution','') }}</div>
+                        <div class="edu-sub">
+                            {{ ed.get('degree','') }}{% if ed.get('field') %} • {{ ed.get('field') }}{% endif %}
+                            {% if ed.get('duration') %}<div style="margin-top:4px;">{{ ed.get('duration') }}{% if ed.get('grade') %} • {{ ed.get('grade') }}{% endif %}</div>{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if skills_obj or non_tech_skills_list %}
+                <div class="side-block">
+                    <div class="side-title">Skills</div>
+                    <ul class="bullet">
+                        {% if skills_obj.get('programming_languages') %}<li><strong style="color:var(--text-main);">Languages:</strong> {{ skills_obj.get('programming_languages') }}</li>{% endif %}
+                        {% if skills_obj.get('web_technologies') %}<li><strong style="color:var(--text-main);">Web:</strong> {{ skills_obj.get('web_technologies') }}</li>{% endif %}
+                        {% if skills_obj.get('frameworks_libraries') %}<li><strong style="color:var(--text-main);">Frameworks:</strong> {{ skills_obj.get('frameworks_libraries') }}</li>{% endif %}
+                        {% if skills_obj.get('tools_platforms') %}<li><strong style="color:var(--text-main);">Tools:</strong> {{ skills_obj.get('tools_platforms') }}</li>{% endif %}
+                        {% if skills_obj.get('concepts') %}<li><strong style="color:var(--text-main);">Concepts:</strong> {{ skills_obj.get('concepts') }}</li>{% endif %}
+                        {% for s in non_tech_skills_list %}<li>{{ s }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </aside>
+
+            <main class="paper">
+                <h1>{{ name }}</h1>
+                <div class="headline muted">{{ department }} • {{ rollno }}</div>
+
+                {% if summary %}
+                <h2>About Me</h2>
+                <div class="para">{{ summary }}</div>
+                {% endif %}
+
+                {% if work_experience_list %}
+                <h2>Work Experience</h2>
+                {% for w in work_experience_list %}
+                <div class="job">
+                    <div class="job-head">
+                        <div>
+                            <div class="job-role">{{ w.get('role','') }}</div>
+                            <div class="job-org">{{ w.get('org','') }}</div>
+                        </div>
+                        <div class="job-meta">{{ w.get('duration','') }}{% if w.get('location') %} • {{ w.get('location') }}{% endif %}</div>
+                    </div>
+                    {% if w.get('desc') %}
+                    <div class="para" style="margin-top:12px;">{{ w.get('desc') }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if projects_list %}
+                <h2>Projects</h2>
+                {% for p in projects_list %}
+                <div class="job">
+                    <div class="job-head">
+                        <div class="job-role">{{ p.get('title','') }}</div>
+                        {% if p.get('tech') %}<div class="job-meta">Tech: {{ p.get('tech') }}</div>{% endif %}
+                    </div>
+                    {% if p.get('desc') %}<div class="para" style="margin-top:12px;">{{ p.get('desc') }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if achievements_list %}
+                <h2>Achievements</h2>
+                <div class="pill-wrap">
+                    {% for a in achievements_list %}
+                    <span class="pill">{{ a }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            if(!themeBtn) return; // Print mode safety
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            // Check if not print mode (where nav uses display:none but JS still runs)
+            if (localStorage.getItem('theme') === 'dark' && !window.location.search.includes('print')) {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+    </script>
+</body>
+</html>

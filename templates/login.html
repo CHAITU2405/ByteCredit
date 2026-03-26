@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 10px 40px rgba(15, 23, 42, 0.1);
+
+            --visual-bg: rgba(255, 255, 255, 0.4);
+
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: rgba(15, 23, 42, 0.15);
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+
+            --visual-bg: rgba(15, 23, 42, 0.4);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-main);
+            overflow: hidden; /* Prevents scrollbars during animation */
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .floating-theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        /* --- GLASS CONTAINER --- */
+        .glass-container {
+            width: 1000px;
+            min-height: 580px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.4s ease, border-color 0.4s ease;
+
+            /* Entrance Animation */
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* --- VISUAL SIDE (LEFT) --- */
+        .visual-side {
+            width: 50%;
+            background: var(--visual-bg);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            position: relative;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* 1. Brand Title */
+        .brand-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 2. Lock Visual - Neater & Cleaner */
+        .lock-container {
+            position: relative;
+            width: 120px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lock-body {
+            position: absolute;
+            bottom: 0;
+            width: 120px;
+            height: 95px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        body.dark-mode .lock-body { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .lock-shackle {
+            position: absolute;
+            top: 0;
+            width: 70px;
+            height: 80px;
+            border: 10px solid var(--text-muted);
+            border-bottom: none;
+            border-radius: 40px 40px 0 0;
+            z-index: 1;
+        }
+
+        .keyhole {
+            width: 14px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 8px;
+            opacity: 0.9;
+        }
+
+        /* 3. Subtitle */
+        .secure-text {
+            margin-top: 60px;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            opacity: 0;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        /* --- FORM SIDE (RIGHT) --- */
+        .form-side {
+            width: 50%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Animated Entrance for Form Elements */
+        .form-header,
+        .input-group,
+        .btn-login,
+        .form-footer {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .form-header { animation-delay: 0.2s; }
+        .input-group:nth-of-type(1) { animation-delay: 0.3s; }
+        .input-group:nth-of-type(2) { animation-delay: 0.4s; }
+        .btn-login { animation-delay: 0.5s; }
+        .form-footer { animation-delay: 0.6s; }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .input-group { margin-bottom: 24px; }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        input::placeholder { color: var(--text-muted); font-weight: 500; }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: var(--input-bg);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 18px;
+            margin-top: 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            background: var(--indigo-500);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.7;
+            transform: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .form-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .form-footer a:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .glass-container {
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+                border: none;
+                border-radius: 0;
+            }
+            .visual-side { display: none; }
+            .form-side { width: 100%; padding: 40px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="floating-theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+
+    <div class="glass-container">
+
+        <div class="visual-side">
+            <h1 class="brand-title">BYTE CREDITS</h1>
+
+            <div class="lock-container">
+                <div class="lock-shackle"></div>
+                <div class="lock-body">
+                    <div class="keyhole"></div>
+                </div>
+            </div>
+
+            <div class="secure-text">SECURE CAMPUS ACCESS</div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Welcome Back</h2>
+                <p>Students: roll no or name · Teachers &amp; staff: Staff ID (from admin)</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Roll no, Staff ID, or name</label>
+                    <input type="text" id="username" placeholder="Student roll / Staff ID" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" class="btn-login">Access Account</button>
+
+                <div class="form-footer">
+                    New student? <a href="/register">Register</a> · Teachers are added by admin.<br><br><br>
+                    <a href="/landing" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">← Back to Home</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-login');
+            btn.innerHTML = "Authenticating...";
+            btn.disabled = true;
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (data.ok && data.redirect) {
+                    if (data.needs_card) window.location.href = '/register-card';
+                    else window.location.href = data.redirect;
+                    return;
+                }
+                alert(data.error || 'Invalid credentials');
+            } catch (err) {
+                alert('Network error. Try again.');
+            }
+            btn.innerHTML = "Access Account";
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>

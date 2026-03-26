@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | View Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+
+            --success: #16a34a;
+            --warning: #ca8a04;
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+
+            --success: #4ade80;
+            --warning: #facc15;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding-bottom: 48px;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        nav a.logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--text-main); }
+        
+        .wrap { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        h1 { font-size: 2rem; margin-bottom: 8px; font-weight: 900; letter-spacing: -0.5px; }
+        .sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; font-weight: 500; }
+        
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .filters { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+        .fg { display: flex; flex-direction: column; gap: 8px; min-width: 160px; flex: 1; }
+        .fg label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            font-weight: 800;
+        }
+        .fg input, .fg select {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: 0.3s;
+        }
+        .fg input:focus, .fg select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn {
+            padding: 13px 24px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            background: var(--indigo-500);
+        }
+        
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            box-shadow: none;
+        }
+        .btn-secondary:hover {
+            background: rgba(15, 23, 42, 0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        body.dark-mode .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-save { background: var(--success); box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3); }
+        .btn-save:hover { background: #15803d; box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4); }
+
+        .stats { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+        .pager {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .pager-note {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .pager-arrow {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            padding: 0;
+            transition: 0.3s;
+        }
+        
+        .stat {
+            background: var(--input-bg);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 1px solid var(--input-border);
+            min-width: 150px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .stat span { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 1px;}
+        .stat strong { font-size: 1.8rem; color: var(--text-main); font-weight: 900; letter-spacing: -0.5px;}
+
+        .table-wrap { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.95rem; }
+        th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid rgba(15, 23, 42, 0.05); transition: background 0.3s ease; }
+        body.dark-mode td, body.dark-mode th { border-bottom-color: rgba(255, 255, 255, 0.05); }
+
+        th {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--glass-border);
+        }
+        
+        .mono { font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        
+        .mark-cell { font-weight: 700; }
+        .mark-cell.editing {
+            cursor: pointer;
+            color: var(--primary);
+            outline: 2px dashed var(--primary);
+            outline-offset: -2px;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .empty { text-align: center; color: var(--text-muted); padding: 60px 20px; font-weight: 500; font-size: 1rem; }
+        
+        @media (max-width: 640px) {
+            th, td { padding: 12px 10px; font-size: 0.85rem; }
+            .panel { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="anim">
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a href="{{ dashboard_href }}" class="logo">BYTE CREDITS</a>
+        </div>
+        <div class="nav-links">
+            {% if role in ('teacher', 'admin') and not password_only_admin %}
+            <a href="{{ url_for('attendance_page') }}">Take attendance</a>
+            {% endif %}
+            <a href="{{ dashboard_href }}">← Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="wrap anim" style="animation-delay: 0.1s;">
+        <h1>View attendance</h1>
+        <p class="sub">
+            {% if role == 'student' %}
+            Your recorded presence from class sessions (after faculty submits the log).
+            {% elif role == 'teacher' %}
+            Excel-style view of sessions you submitted. One row per student with period-wise columns.
+            {% else %}
+            Excel-style attendance summary (admin view).
+            {% endif %}
+        </p>
+
+        <div class="panel">
+            <form class="filters" method="get" action="{{ url_for('view_attendance') }}">
+                <div class="fg">
+                    <label>Start date</label>
+                    <input type="date" name="start_date" value="{{ filters.start_date }}">
+                </div>
+                <div class="fg">
+                    <label>End date</label>
+                    <input type="date" name="end_date" value="{{ filters.end_date }}">
+                </div>
+                <div class="fg">
+                    <label>Class</label>
+                    <select name="class_key">
+                        <option value="">All classes</option>
+                        {% for c in class_options %}
+                        <option value="{{ c.value }}" {% if filters.class_key == c.value %}selected{% endif %}>{{ c.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Subject</label>
+                    <select name="subject_key">
+                        <option value="">All subjects</option>
+                        {% for s in subject_options %}
+                        <option value="{{ s.value }}" {% if filters.subject_key == s.value %}selected{% endif %}>{{ s.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Apply</button>
+            </form>
+            
+            <div class="dl-row" style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(15, 23, 42, 0.1);">
+                <p class="pager-note" style="margin-bottom:12px;">Download filtered: same filters as above, full date range (every day in the range, not only the current page).</p>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+                    <a class="btn btn-secondary" href="{{ url_for('view_attendance_download', mode='filtered', start_date=filters.start_date or none, end_date=filters.end_date or none, class_key=filters.class_key or none, subject_key=filters.subject_key or none) }}">Download filtered (Excel)</a>
+                    {% if role in ('teacher', 'admin') %}
+                    <a class="btn btn-secondary" href="{{ url_for('view_attendance_download', mode='entire', class_key=filters.class_key or none, subject_key=filters.subject_key or none) }}">Download entire file</a>
+                    {% endif %}
+                    {% if role == 'admin' and filters.class_key %}
+                    <a class="btn btn-secondary" href="{{ url_for('view_attendance_download', mode='entire', class_key=filters.class_key, format='roster') }}">Class roster workbook</a>
+                    {% endif %}
+                </div>
+                {% if role == 'admin' %}
+                <p class="pager-note" style="margin-top:16px;margin-bottom:0;"><strong>Entire file:</strong> Subject attendance Excel only for the class in the filter (one sheet per subject in that class). All classes if none selected. <strong>Class roster workbook</strong> is the original class file (when a class is selected).</p>
+                {% elif role == 'teacher' %}
+                <p class="pager-note" style="margin-top:16px;margin-bottom:0;"><strong>Entire file:</strong> With a class in the filter, only subjects for that class. Incharge + subject: that subject. Incharge, no subject: class workbook. No class filter: all your assigned classes/subjects.</p>
+                {% endif %}
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span>Students (this view)</span>
+                    <strong>{{ total_count }}</strong>
+                </div>
+                {% if unique_students is not none %}
+                <div class="stat">
+                    <span>Unique students (this view)</span>
+                    <strong>{{ unique_students }}</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="panel anim" style="animation-delay: 0.2s;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px;flex-wrap:wrap;">
+                {% if pagination and pagination.enabled %}
+                <div class="pager">
+                    {% if pagination.has_prev %}
+                    <a class="btn btn-secondary pager-arrow" title="Previous date" href="{{ url_for('view_attendance', start_date=filters.start_date, end_date=filters.end_date, class_key=filters.class_key, subject_key=filters.subject_key, page=pagination.page-1) }}">&#8592;</a>
+                    {% else %}
+                    <span class="btn btn-secondary pager-arrow" style="opacity:0.45;cursor:not-allowed;">&#8592;</span>
+                    {% endif %}
+                    
+                    <span class="pager-note">
+                        <strong style="color:var(--text-main);">{{ pagination.current_date or 'No date' }}</strong> ({{ pagination.page }}/{{ pagination.total_pages }})
+                    </span>
+                    
+                    {% if pagination.has_next %}
+                    <a class="btn btn-secondary pager-arrow" title="Next date" href="{{ url_for('view_attendance', start_date=filters.start_date, end_date=filters.end_date, class_key=filters.class_key, subject_key=filters.subject_key, page=pagination.page+1) }}">&#8594;</a>
+                    {% else %}
+                    <span class="btn btn-secondary pager-arrow" style="opacity:0.45;cursor:not-allowed;">&#8594;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if role in ('teacher', 'admin') and not subject_date_view %}
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <button type="button" id="btnToggleEdit" class="btn btn-secondary">Enable Edit</button>
+                    <button type="button" id="btnSaveEdit" class="btn btn-save" style="display:none;">Save Changes</button>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll no</th>
+                            <th>Name</th>
+                            {% for p in period_headers %}
+                            <th>{{ table_header_labels[p] }}</th>
+                            {% endfor %}
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td class="mono">{{ r.student_rollno }}</td>
+                            <td style="font-weight:600;">{{ r.student_name or '—' }}</td>
+                            {% for p in period_headers %}
+                            <td
+                                class="mark-cell"
+                                data-roll="{{ r.student_rollno }}"
+                                data-period="{{ p }}"
+                                data-mark="{{ r.period_marks[p] }}"
+                                data-editable="{{ '1' if p in editable_periods else '0' }}"
+                                style="color: {{ 'var(--success)' if r.period_marks[p] == 'P' else 'var(--danger)' if r.period_marks[p] == 'A' else 'inherit' }}"
+                            >{{ r.period_marks[p] }}</td>
+                            {% endfor %}
+                            <td><strong style="font-size:1.1rem;">{{ r.total_present }}</strong></td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="{{ 3 + (period_headers|length) }}" class="empty">
+                                No records match these filters. Take attendance and submit a log first, or widen the filters.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+    </script>
+
+    {% if role in ('teacher', 'admin') and not subject_date_view %}
+    <script>
+        const ATTENDANCE_EDIT_SAVE_URL = {{ url_for('api_attendance_edit_save') | tojson }};
+        const CAN_EDIT = {{ can_edit | tojson }};
+        const EDIT_BLOCK_REASON = {{ edit_block_reason | tojson }};
+        const EDIT_CLASS_KEY = {{ filters.class_key | tojson }};
+        const EDIT_SESSION_DATE = {{ edit_session_date | tojson }};
+
+        let editMode = false;
+        const btnToggleEdit = document.getElementById('btnToggleEdit');
+        const btnSaveEdit = document.getElementById('btnSaveEdit');
+
+        function setCellMark(cell, next) {
+            cell.dataset.mark = next;
+            cell.textContent = next;
+            if(next === 'P') cell.style.color = 'var(--success)';
+            else if(next === 'A') cell.style.color = 'var(--danger)';
+            else cell.style.color = 'inherit';
+        }
+
+        function toggleCellMark(cell) {
+            if (cell.dataset.editable !== '1' || !editMode) return;
+            const cur = (cell.dataset.mark || '-').toUpperCase();
+            const next = cur === 'P' ? 'A' : 'P';
+            setCellMark(cell, next);
+        }
+
+        function setEditMode(enabled) {
+            editMode = enabled;
+            document.querySelectorAll('.mark-cell').forEach((cell) => {
+                if (cell.dataset.editable === '1' && enabled) {
+                    cell.classList.add('editing');
+                } else {
+                    cell.classList.remove('editing');
+                }
+            });
+            btnToggleEdit.textContent = enabled ? 'Disable Edit' : 'Enable Edit';
+            btnSaveEdit.style.display = enabled ? 'inline-block' : 'none';
+        }
+
+        document.querySelectorAll('.mark-cell').forEach((cell) => {
+            cell.addEventListener('click', () => toggleCellMark(cell));
+        });
+
+        if (btnToggleEdit) {
+            btnToggleEdit.addEventListener('click', () => {
+                if (!editMode && !CAN_EDIT) {
+                    alert(EDIT_BLOCK_REASON || 'Choose class and same start/end date to edit.');
+                    return;
+                }
+                setEditMode(!editMode);
+            });
+        }
+
+        if (btnSaveEdit) {
+            btnSaveEdit.addEventListener('click', async () => {
+                if (!editMode) return;
+                if (!EDIT_CLASS_KEY || !EDIT_SESSION_DATE) {
+                    alert('Select class and same start/end date first.');
+                    return;
+                }
+                const rowsMap = new Map();
+                document.querySelectorAll('.mark-cell[data-editable="1"]').forEach((cell) => {
+                    const roll = cell.dataset.roll || '';
+                    const period = cell.dataset.period || '';
+                    const mark = (cell.dataset.mark || '').toUpperCase();
+                    if (!roll || !period || (mark !== 'P' && mark !== 'A')) return;
+                    if (!rowsMap.has(roll)) rowsMap.set(roll, { rollno: roll, marks: {} });
+                    rowsMap.get(roll).marks[period] = mark;
+                });
+                const payload = {
+                    class_key: EDIT_CLASS_KEY,
+                    session_date: EDIT_SESSION_DATE,
+                    rows: Array.from(rowsMap.values()),
+                };
+                
+                btnSaveEdit.textContent = 'Saving...';
+                btnSaveEdit.disabled = true;
+
+                try {
+                    const res = await fetch(ATTENDANCE_EDIT_SAVE_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(payload),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!data.ok) {
+                        alert(data.error || 'Failed to save changes');
+                        btnSaveEdit.textContent = 'Save Changes';
+                        btnSaveEdit.disabled = false;
+                        return;
+                    }
+                    alert('Attendance changes saved successfully.');
+                    location.reload();
+                } catch (e) {
+                    alert('Network error while saving changes');
+                    btnSaveEdit.textContent = 'Save Changes';
+                    btnSaveEdit.disabled = false;
+                }
+            });
+        }
+    </script>
+    {% endif %}
+
+    <script>
+        // Dynamically refresh subject options when class dropdown changes,
+        // so "Apply" is only for filtering the table, not for populating dropdowns.
+        (function () {
+            const form = document.querySelector('form.filters');
+            if (!form) return;
+            const classSel = form.querySelector('select[name="class_key"]');
+            const subjSel = form.querySelector('select[name="subject_key"]');
+            if (!classSel || !subjSel) return;
+
+            async function refreshSubjects() {
+                const ck = (classSel.value || '').trim();
+                // Reset subjects immediately
+                const keepAll = document.createElement('option');
+                keepAll.value = '';
+                keepAll.textContent = 'All subjects';
+                subjSel.innerHTML = '';
+                subjSel.appendChild(keepAll);
+
+                if (!ck) return;
+                try {
+                    const res = await fetch('/api/view-attendance-subject-options?class_key=' + encodeURIComponent(ck), {
+                        method: 'GET',
+                        credentials: 'same-origin',
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!data.ok || !Array.isArray(data.subjects)) return;
+                    data.subjects.forEach((s) => {
+                        const o = document.createElement('option');
+                        o.value = s.value;
+                        o.textContent = s.label;
+                        subjSel.appendChild(o);
+                    });
+                } catch (e) {
+                    // ignore network errors; dropdown still has "All subjects"
+                }
+            }
+
+            classSel.addEventListener('change', () => {
+                // When class changes, clear subject selection and reload options.
+                subjSel.value = '';
+                refreshSubjects();
+            });
+        })();
+    </script>
+</body>
+</html>

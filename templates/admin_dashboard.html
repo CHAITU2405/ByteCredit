@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Admin — Credit requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --border-color: rgba(15, 23, 42, 0.1);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+            
+            --btn-ok-bg: var(--primary);
+            --btn-ok-text: #ffffff;
+            --btn-ok-hover: var(--indigo-500);
+        }
+
+        body.dark-mode {
+            /* Dark Theme */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            --primary: var(--indigo-500);
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+            
+            --btn-ok-bg: var(--primary);
+            --btn-ok-text: #ffffff;
+            --btn-ok-hover: var(--indigo-400);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { 
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite; 
+            color: var(--text-main); 
+            padding: 24px 20px 48px; 
+            min-height: 100vh;
+            transition: color 0.3s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        nav { max-width: 1100px; margin: 0 auto 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--glass-bg); padding: 15px 25px; border-radius: 12px; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); transition: background 0.3s ease, border-color 0.3s ease;}
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 600; transition: 0.2s; }
+        nav a:hover { color: var(--text-main); }
+        .theme-toggle { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; transition: transform 0.2s; margin-right: 15px; }
+        .theme-toggle:hover { transform: scale(1.1); }
+        h1 { max-width: 1100px; margin: 0 auto 8px; font-size: 1.5rem; }
+        .sub { max-width: 1100px; margin: 0 auto 24px; color: var(--text-muted); font-size: 0.9rem; }
+        .panel { max-width: 1100px; margin: 0 auto 32px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); transition: background 0.3s ease, border-color 0.3s ease;}
+        h2 { font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+        th { color: var(--text-main); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        img.thumb { max-width: 120px; max-height: 80px; border-radius: 6px; object-fit: cover; cursor: pointer; border: 1px solid var(--border-color); }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        button, .btn-link {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-ok { background: var(--btn-ok-bg); color: var(--btn-ok-text); }
+        .btn-ok:hover { background: var(--btn-ok-hover); }
+        .btn-no { background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); }
+        .btn-no:hover { background: rgba(255,255,255,0.1); border-color: var(--text-main); }
+        .note { width: 100%; max-width: 200px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); font-size: 0.8rem; }
+        .note::placeholder { color: var(--text-muted); }
+        .msg { margin-top: 8px; font-size: 0.8rem; color: var(--text-muted); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .form-grid label { font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 4px; font-weight: bold; }
+        .form-grid input, .form-grid select {
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--input-border);
+            background: var(--input-bg); color: var(--text-main); font-size: 0.9rem;
+        }
+        .form-grid input:focus, .form-grid select:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+        }
+        .form-actions { margin-top: 8px; }
+        #teacherFormMsg { margin-top: 10px; font-size: 0.85rem; }
+
+        @media (max-width: 640px) {
+            body { padding: 15px 12px 40px; }
+            nav { padding: 12px 15px; }
+            .panel { padding: 15px; margin-bottom: 20px; }
+            h1 { font-size: 1.3rem; }
+            th, td { padding: 8px 6px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <span style="font-weight:800;letter-spacing:1px;color:var(--text-main);">ADMIN</span>
+        </div>
+        <div>
+            <a href="{{ url_for('view_attendance') }}">View attendance</a>
+            ·
+            {% if password_admin_only %}
+            <a href="/admin/logout">Logout (admin session)</a>
+            {% else %}
+            <a href="/logout">Logout</a>
+            {% endif %}
+            · <a href="/landing">Site</a>
+        </div>
+    </nav>
+    <h1>Admin dashboard</h1>
+    <p class="sub">Manage teachers / staff accounts and approve student credit top-ups.</p>
+
+    <div class="panel">
+        <h2>Add teacher or admin account</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:14px;">Staff log in at <strong>/login</strong> with Staff ID and password. Use role <em>Teacher</em> for faculty, <em>Admin</em> for accounts that should reach this dashboard after login.</p>
+        <form id="teacherForm">
+            <div class="form-grid">
+                <div><label>Staff ID (login)</label><input name="staff_id" id="tf_staff" required placeholder="e.g. CSE-FAC-042"></div>
+                <div><label>Full name</label><input name="name" id="tf_name" required></div>
+                <div><label>Department</label><input name="department" id="tf_dept" required></div>
+                <div><label>Phone</label><input name="phone" id="tf_phone" required></div>
+                <div><label>Email</label><input name="email" id="tf_email" type="email" required></div>
+                <div><label>Password (min 6)</label><input name="password" id="tf_pwd" type="password" required minlength="6"></div>
+                <div><label>Role</label>
+                    <select name="role" id="tf_role">
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div><label>Class in-charge (teacher only)</label>
+                    <select name="class_incharge_key" id="tf_incharge_class">
+                        <option value="">Not class in-charge</option>
+                        {% for c in attendance_classes %}
+                        <option value="{{ c.name_key }}">{{ c.display_name }} ({{ c.name_key }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div><label>Assigned classes (multi)</label>
+                    <select name="assigned_class_keys" id="tf_assigned_classes" multiple size="4">
+                        {% for c in attendance_classes %}
+                        <option value="{{ c.name_key }}">{{ c.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div><label>Assigned subjects (multi)</label>
+                    <select name="assigned_subject_keys" id="tf_assigned_subjects" multiple size="4">
+                        {% for s in attendance_subjects %}
+                        <option value="{{ s.key }}">{{ s.name }} (Sem {{ s.semester_no }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-ok" style="padding:10px 20px;">Create account</button>
+            </div>
+        </form>
+        <div id="teacherFormMsg"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Create class</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:14px;">
+            This only saves the class info in the database. Use <strong>Create Excel</strong> in the Classes list to generate the Excel later using saved DB values.
+        </p>
+        <form id="classForm">
+            <div class="form-grid">
+                <div><label>Academic year</label><input id="cf_ay" required placeholder="2025-26"></div>
+                <div><label>Class name</label><input id="cf_classname" required placeholder="CSE-C"></div>
+                <div><label>Roll prefix</label><input id="cf_prefix" required placeholder="21A91A05"></div>
+                <div><label>Starting no.</label><input type="number" id="cf_start" required placeholder="1"></div>
+                <div><label>Ending no.</label><input type="number" id="cf_end" required placeholder="60"></div>
+                <div style="grid-column:1/-1;"><label>Missing numbers (skipped in start–end range)</label><input id="cf_missing" placeholder="e.g. 3, 7, 15 or ranges 5-10, 20-25 (comma / newline / space)"></div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-ok" style="padding:10px 20px;">Create class</button>
+            </div>
+        </form>
+        <div id="classFormMsg"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Create Excel</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:14px;">
+            Choose <strong>Academic year</strong> and <strong>Class</strong>. Excel is created using DB values (start/end/missing) and downloaded.
+            File name is <code style="color:#a5b4fc;">academic_year_semNo.xlsx</code>.
+        </p>
+        <form id="createExcelForm">
+            <div class="form-grid">
+                <div>
+                    <label>Academic year</label>
+                    <select id="ex_ay" required>
+                        <option value="">Select</option>
+                        {% set _ays = [] %}
+                        {% for c in attendance_classes %}
+                            {% if c.academic_year and c.academic_year not in _ays %}
+                                {% set _ = _ays.append(c.academic_year) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for ay in _ays|sort %}
+                            <option value="{{ ay }}">{{ ay }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>Semester (1–8)</label>
+                    <input type="number" id="ex_sem" required min="1" max="8" placeholder="1">
+                </div>
+                <div>
+                    <label>Class</label>
+                    <select id="ex_class" required disabled>
+                        <option value="">Select academic year first</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-ok" id="ex_btn" style="padding:10px 20px;" disabled>Create Excel</button>
+            </div>
+        </form>
+        <div id="createExcelMsg"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Classes</h2>
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Academic year</th><th>Section</th><th>Roll range</th><th>Excel</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for c in attendance_classes %}
+                <tr>
+                    <td>{{ c.display_name }}</td>
+                    <td>{{ c.academic_year }}</td>
+                    <td>{{ c.dept_section }}</td>
+                    <td>{{ c.roll_prefix }} ({{ c.start_seq }}–{{ c.end_seq }})</td>
+                    <td><a href="{{ url_for('admin_download_class_roster', class_id=c.id) }}" style="color:var(--neon);">Download</a></td>
+                    <td><button type="button" class="btn-no" data-del-class="{{ c.id }}">Delete</button></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="color:var(--text-muted);">No classes yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <h2>Add attendance subject</h2>
+        <form id="subjectForm">
+            <div class="form-grid">
+                <div><label>Subject name</label><input id="sf_name" required placeholder="Artificial Intelligence"></div>
+                <div><label>Subject key (optional)</label><input id="sf_key" placeholder="ai"></div>
+                <div><label>Semester (1–8)</label><input type="number" id="sf_sem" required min="1" max="8" value="1"></div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-ok" style="padding:10px 20px;">Add subject</button>
+            </div>
+        </form>
+        <div id="subjectFormMsg"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Teachers & admin accounts</h2>
+        <table>
+            <thead>
+                <tr><th>Staff ID</th><th>Name</th><th>Role</th><th>Class in-charge</th><th>Department</th><th>Email</th><th>Phone</th><th>Created</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for t in teachers %}
+                <tr data-staff-row="{{ t.id }}">
+                    <td>{{ t.rollno }}</td>
+                    <td><input id="st_name_{{ t.id }}" value="{{ t.name }}" style="width:170px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);"></td>
+                    <td>
+                        <select id="st_role_{{ t.id }}" data-role-staff="{{ t.id }}" style="padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);">
+                            <option value="teacher" {% if t.role == 'teacher' %}selected{% endif %}>teacher</option>
+                            <option value="admin" {% if t.role == 'admin' %}selected{% endif %}>admin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="st_class_{{ t.id }}" style="max-width:180px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);">
+                            <option value="">Not class in-charge</option>
+                            {% for c in attendance_classes %}
+                            <option value="{{ c.name_key }}" {% if teacher_incharge_map.get(t.rollno) == c.name_key %}selected{% endif %}>{{ c.display_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div style="margin-top:6px;">
+                            <select id="st_assigned_classes_{{ t.id }}" multiple size="4" style="max-width:180px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);">
+                                {% for c in attendance_classes %}
+                                <option value="{{ c.name_key }}" {% if c.name_key in teacher_class_map.get(t.rollno, []) %}selected{% endif %}>{{ c.display_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div style="margin-top:6px;">
+                            <select id="st_assigned_subjects_{{ t.id }}" multiple size="4" style="max-width:180px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);">
+                            {% for s in attendance_subjects %}
+                            <option value="{{ s.key }}" {% if s.key in teacher_subject_map.get(t.rollno, []) %}selected{% endif %}>{{ s.name }} (Sem {{ s.semester_no }})</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </td>
+                    <td><input id="st_dept_{{ t.id }}" value="{{ t.department }}" style="width:130px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);"></td>
+                    <td><input id="st_email_{{ t.id }}" type="email" value="{{ t.email }}" style="width:190px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);"></td>
+                    <td><input id="st_phone_{{ t.id }}" value="{{ t.phone }}" style="width:130px;padding:6px 8px;border-radius:6px;border:1px solid var(--border-color);background:#ffffff;color:var(--text-main);"></td>
+                    <td>{{ t.created_at }}</td>
+                    <td>
+                        <button type="button" class="btn-ok" data-save-staff="{{ t.id }}">Save</button>
+                        <div id="staff_msg_{{ t.id }}" style="margin-top:6px;font-size:0.78rem;color:var(--text-muted);"></div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" style="color:var(--text-muted);">No staff accounts yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <h2>Credit requests — pending</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Roll</th>
+                    <th>Amount</th>
+                    <th>Screenshot</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in pending %}
+                <tr data-req="{{ r.id }}">
+                    <td>#{{ r.id }}</td>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.rollno }}</td>
+                    <td>{{ r.amount }} PTS</td>
+                    <td>
+                        <a href="{{ url_for('static', filename=r.screenshot_path) }}" target="_blank" rel="noopener">
+                            <img class="thumb" src="{{ url_for('static', filename=r.screenshot_path) }}" alt="Proof">
+                        </a>
+                    </td>
+                    <td>{{ r.created_at }}</td>
+                    <td>
+                        <div class="actions">
+                            <input type="text" class="note" placeholder="Note (optional)" id="note-{{ r.id }}">
+                            <button type="button" class="btn-ok" data-approve="{{ r.id }}">Approve</button>
+                            <button type="button" class="btn-no" data-reject="{{ r.id }}">Reject</button>
+                        </div>
+                        <div class="msg" id="msg-{{ r.id }}"></div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" style="color:var(--text-muted);">No pending requests.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <h2>Credit requests — recent decisions</h2>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Student</th><th>Roll</th><th>Amount</th><th>Status</th><th>Submitted</th><th>Reviewed</th></tr>
+            </thead>
+            <tbody>
+                {% for r in recent %}
+                <tr>
+                    <td>#{{ r.id }}</td>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.rollno }}</td>
+                    <td>{{ r.amount }}</td>
+                    <td>{{ r.status }}</td>
+                    <td>{{ r.created_at }}</td>
+                    <td>{{ r.reviewed_at or '—' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" style="color:var(--text-muted);">None yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function postForm(url, note) {
+            const body = new URLSearchParams();
+            if (note) body.set('note', note);
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+            return res.json().catch(() => ({}));
+        }
+        document.querySelectorAll('[data-approve]').forEach((btn) => {
+            btn.onclick = async () => {
+                const id = btn.getAttribute('data-approve');
+                const noteEl = document.getElementById('note-' + id);
+                const msg = document.getElementById('msg-' + id);
+                msg.textContent = '…';
+                const data = await postForm('/admin/credit/' + id + '/approve', noteEl ? noteEl.value : '');
+                if (data.ok) location.reload();
+                else msg.textContent = data.error || 'Failed';
+            };
+        });
+        document.querySelectorAll('[data-reject]').forEach((btn) => {
+            btn.onclick = async () => {
+                const id = btn.getAttribute('data-reject');
+                const noteEl = document.getElementById('note-' + id);
+                const msg = document.getElementById('msg-' + id);
+                msg.textContent = '…';
+                const data = await postForm('/admin/credit/' + id + '/reject', noteEl ? noteEl.value : '');
+                if (data.ok) location.reload();
+                else msg.textContent = data.error || 'Failed';
+            };
+        });
+
+        document.getElementById('teacherForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const msgEl = document.getElementById('teacherFormMsg');
+            msgEl.textContent = '';
+            const body = {
+                staff_id: document.getElementById('tf_staff').value.trim(),
+                name: document.getElementById('tf_name').value.trim(),
+                department: document.getElementById('tf_dept').value.trim(),
+                phone: document.getElementById('tf_phone').value.trim(),
+                email: document.getElementById('tf_email').value.trim(),
+                password: document.getElementById('tf_pwd').value,
+                role: document.getElementById('tf_role').value,
+                class_incharge_key: document.getElementById('tf_incharge_class').value,
+                assigned_class_keys: Array.from(document.getElementById('tf_assigned_classes').selectedOptions).map(o => o.value),
+                assigned_subject_keys: Array.from(document.getElementById('tf_assigned_subjects').selectedOptions).map(o => o.value),
+            };
+            try {
+                const res = await fetch('{{ url_for("admin_add_teacher") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (data.ok) {
+                    msgEl.style.color = '#86efac';
+                    msgEl.textContent = 'Account created.';
+                    location.reload();
+                    return;
+                }
+                msgEl.style.color = '#fecaca';
+                msgEl.textContent = data.error || 'Failed';
+            } catch (err) {
+                msgEl.style.color = '#fecaca';
+                msgEl.textContent = 'Network error';
+            }
+        };
+        const roleSel = document.getElementById('tf_role');
+        const inchargeSel = document.getElementById('tf_incharge_class');
+        function syncInchargeField() {
+            const isTeacher = roleSel && roleSel.value === 'teacher';
+            if (inchargeSel) {
+                inchargeSel.disabled = !isTeacher;
+                if (!isTeacher) inchargeSel.value = '';
+            }
+            const assignedClassSel = document.getElementById('tf_assigned_classes');
+            const assignedSubSel = document.getElementById('tf_assigned_subjects');
+            if (assignedClassSel) assignedClassSel.disabled = !isTeacher;
+            if (assignedSubSel) assignedSubSel.disabled = !isTeacher;
+        }
+        if (roleSel) {
+            roleSel.addEventListener('change', syncInchargeField);
+            syncInchargeField();
+        }
+        document.querySelectorAll('[data-role-staff]').forEach((el) => {
+            const id = el.getAttribute('data-role-staff');
+            const clsSel = document.getElementById('st_class_' + id);
+            const clsMultiSel = document.getElementById('st_assigned_classes_' + id);
+            const subMultiSel = document.getElementById('st_assigned_subjects_' + id);
+            const sync = () => {
+                const isTeacher = el.value === 'teacher';
+                if (clsSel) {
+                    clsSel.disabled = !isTeacher;
+                    if (!isTeacher) clsSel.value = '';
+                }
+                if (clsMultiSel) clsMultiSel.disabled = !isTeacher;
+                if (subMultiSel) subMultiSel.disabled = !isTeacher;
+            };
+            el.addEventListener('change', sync);
+            sync();
+        });
+        document.querySelectorAll('[data-save-staff]').forEach((btn) => {
+            btn.onclick = async () => {
+                const id = btn.getAttribute('data-save-staff');
+                const msgEl = document.getElementById('staff_msg_' + id);
+                msgEl.style.color = 'var(--text-muted)';
+                msgEl.textContent = 'Saving...';
+                const body = {
+                    name: document.getElementById('st_name_' + id).value.trim(),
+                    role: document.getElementById('st_role_' + id).value,
+                    class_incharge_key: document.getElementById('st_class_' + id).value,
+                    assigned_class_keys: Array.from(document.getElementById('st_assigned_classes_' + id).selectedOptions).map(o => o.value),
+                    assigned_subject_keys: Array.from(document.getElementById('st_assigned_subjects_' + id).selectedOptions).map(o => o.value),
+                    department: document.getElementById('st_dept_' + id).value.trim(),
+                    email: document.getElementById('st_email_' + id).value.trim(),
+                    phone: document.getElementById('st_phone_' + id).value.trim(),
+                };
+                try {
+                    const res = await fetch('/admin/teacher/' + id + '/update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (data.ok) {
+                        msgEl.style.color = '#517664';
+                        msgEl.textContent = 'Saved';
+                        return;
+                    }
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = data.error || 'Failed';
+                } catch (e) {
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = 'Network error';
+                }
+            };
+        });
+
+        const subjectForm = document.getElementById('subjectForm');
+        if (subjectForm) {
+            subjectForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const msgEl = document.getElementById('subjectFormMsg');
+                msgEl.textContent = '';
+                try {
+                    const res = await fetch('{{ url_for("admin_add_subject") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            subject_name: document.getElementById('sf_name').value.trim(),
+                            subject_key: document.getElementById('sf_key').value.trim(),
+                            semester_no: parseInt(document.getElementById('sf_sem').value, 10),
+                        }),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (data.ok) {
+                        msgEl.style.color = '#517664';
+                        msgEl.textContent = 'Subject added.';
+                        location.reload();
+                        return;
+                    }
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = data.error || 'Failed';
+                } catch (err) {
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = 'Network error';
+                }
+            };
+        }
+
+        const classFormEl = document.getElementById('classForm');
+        if (classFormEl) {
+            classFormEl.onsubmit = async (e) => {
+                e.preventDefault();
+                const msgEl = document.getElementById('classFormMsg');
+                msgEl.textContent = '';
+                const body = {
+                    academic_year: document.getElementById('cf_ay').value.trim(),
+                    class_name: document.getElementById('cf_classname').value.trim(),
+                    roll_prefix: document.getElementById('cf_prefix').value.trim(),
+                    start_seq: parseInt(document.getElementById('cf_start').value, 10),
+                    end_seq: parseInt(document.getElementById('cf_end').value, 10),
+                    missing_numbers: document.getElementById('cf_missing').value,
+                };
+                try {
+                    const res = await fetch('{{ url_for("admin_create_class") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (data.ok) {
+                        msgEl.style.color = '#517664';
+                        msgEl.textContent = 'Class created.';
+                        location.reload();
+                        return;
+                    }
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = data.error || 'Failed';
+                } catch (err) {
+                    msgEl.style.color = '#7f1d1d';
+                    msgEl.textContent = 'Network error';
+                }
+            };
+        }
+        document.querySelectorAll('[data-del-class]').forEach((btn) => {
+            btn.onclick = async () => {
+                if (!confirm('Delete this class and its Excel file?')) return;
+                const id = btn.getAttribute('data-del-class');
+                try {
+                    const res = await fetch('/admin/class/' + id + '/delete', { method: 'POST' });
+                    const data = await res.json().catch(() => ({}));
+                    if (data.ok) location.reload();
+                    else alert(data.error || 'Delete failed');
+                } catch (e) {
+                    alert('Network error');
+                }
+            };
+        });
+
+        const ALL_CLASSES = {{ attendance_classes_json|tojson }};
+        const exAy = document.getElementById('ex_ay');
+        const exSem = document.getElementById('ex_sem');
+        const exClass = document.getElementById('ex_class');
+        const exBtn = document.getElementById('ex_btn');
+        const exForm = document.getElementById('createExcelForm');
+        const exMsg = document.getElementById('createExcelMsg');
+
+        function refreshClassOptions() {
+            const ay = (exAy && exAy.value) ? exAy.value : '';
+            if (!exClass || !exBtn) return;
+            exClass.innerHTML = '';
+            if (!ay) {
+                exClass.disabled = true;
+                exBtn.disabled = true;
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'Select academic year first';
+                exClass.appendChild(opt);
+                return;
+            }
+            const opts = ALL_CLASSES.filter(c => (c.academic_year || '') === ay);
+            exClass.disabled = false;
+            exBtn.disabled = opts.length === 0;
+            const first = document.createElement('option');
+            first.value = '';
+            first.textContent = opts.length ? 'Select class' : 'No classes for this year';
+            exClass.appendChild(first);
+            opts.forEach(c => {
+                const o = document.createElement('option');
+                o.value = String(c.id);
+                o.textContent = `${c.display_name}`;
+                exClass.appendChild(o);
+            });
+        }
+
+        if (exAy) exAy.onchange = refreshClassOptions;
+        refreshClassOptions();
+
+        if (exForm) {
+            exForm.onsubmit = async (e) => {
+                e.preventDefault();
+                if (!exClass || !exAy || !exSem) return;
+                const classId = exClass.value;
+                const semNo = parseInt(exSem.value, 10);
+                exMsg.textContent = '';
+                if (!classId) {
+                    exMsg.style.color = '#7f1d1d';
+                    exMsg.textContent = 'Select a class.';
+                    return;
+                }
+                if (!(semNo >= 1 && semNo <= 8)) {
+                    exMsg.style.color = '#7f1d1d';
+                    exMsg.textContent = 'Enter semester between 1 and 8.';
+                    return;
+                }
+                exBtn.disabled = true;
+                const oldText = exBtn.textContent;
+                exBtn.textContent = 'Creating...';
+                try {
+                    const res = await fetch('/admin/class/excel/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ class_id: parseInt(classId, 10), semester_no: semNo }),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (data.ok && data.download) {
+                        exMsg.style.color = '#517664';
+                        exMsg.innerHTML = 'Excel created. <a href=\"' + data.download + '\" style=\"color:var(--text-main);\">Download</a>';
+                        exBtn.textContent = oldText;
+                        exBtn.disabled = false;
+                        return;
+                    }
+                    exMsg.style.color = '#7f1d1d';
+                    exMsg.textContent = data.error || 'Create Excel failed';
+                } catch (err) {
+                    exMsg.style.color = '#7f1d1d';
+                    exMsg.textContent = 'Network error';
+                } finally {
+                    exBtn.textContent = oldText;
+                    exBtn.disabled = false;
+                }
+            };
+        }
+        
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize Theme on Load
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+    </script>
+</body>
+</html>

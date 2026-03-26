@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | NFC Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+            
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+
+            --success: #16a34a;
+            --danger: #ef4444;
+            
+            --terminal-bg: #ffffff;
+            --terminal-screen: var(--slate-50);
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+
+            --success: #4ade80;
+            --danger: #f87171;
+            
+            --terminal-bg: rgba(30, 41, 59, 0.8);
+            --terminal-screen: #020617;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; border-width: 4px; }
+            100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
+        }
+
+        .anim {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .back-btn:hover { color: var(--text-main); }
+
+        .payment-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .form-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            color: var(--text-main);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .amount-wrapper { position: relative; }
+
+        .amount-symbol {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            font-weight: 800;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .amount-input, .text-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 18px;
+            padding-left: 70px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.25rem;
+            font-weight: bold;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .text-input {
+            padding-left: 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pin-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 16px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            letter-spacing: 12px;
+            text-align: center;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        .amount-input:focus, .text-input:focus, .pin-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: rgba(255,255,255,0.05); /* very slight highlight */
+        }
+
+        .custom-select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 15px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .custom-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-pay:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            background: var(--indigo-500);
+        }
+        .btn-pay:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .hint { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; font-weight: 500;}
+        .err-box {
+            display: none;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .err-box.show { display: block; }
+
+        .visual-section {
+            height: 500px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nfc-terminal {
+            width: 100%;
+            max-width: 320px;
+            height: 420px;
+            background: var(--terminal-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 20px;
+            z-index: 2;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .terminal-screen {
+            width: 100%;
+            height: 180px;
+            background: var(--terminal-screen);
+            border-radius: 15px;
+            border: 1px solid var(--input-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-family: inherit;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.05);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .ts-amount {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            font-weight: 900;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        .ts-status {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--primary);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .sensor-area {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nfc-icon { font-size: 3rem; color: var(--text-muted); z-index: 5; transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;}
+
+        .wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scanning .wave { animation: ripple 1.5s infinite ease-out; }
+        .scanning .nfc-icon { color: var(--primary); text-shadow: 0 0 20px var(--primary); }
+        .success .nfc-icon { color: var(--success); transform: scale(1.15); text-shadow: 0 0 20px var(--success);}
+
+        .manual-uid { margin-top: 8px; }
+        .manual-uid input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-family: monospace;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .manual-uid input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+
+        @media (max-width: 900px) {
+            .payment-container { grid-template-columns: 1fr; }
+            .visual-section { display: none; }
+            .form-section { max-width: 500px; margin: 0 auto; padding: 30px 22px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="anim">
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a href="{% if logged_in %}/student-dashboard{% else %}/landing{% endif %}" class="logo">BYTE CREDITS</a>
+        </div>
+        <a href="{% if logged_in %}/student-dashboard{% else %}/landing{% endif %}" class="back-btn">← Back</a>
+    </nav>
+
+    <div class="payment-container">
+        <div class="form-section anim">
+            <div class="section-header">
+                <h2>NFC transfer</h2>
+                <p>Pay <strong>to</strong> a recipient’s roll number. The <strong>payer</strong> taps their card and enters their card PIN.</p>
+                {% if name %}
+                <p style="margin-top:12px; font-weight:600; color:var(--text-main);">Logged in: {{ name }} · {{ rollno }} · <span style="color:var(--primary);">Balance: {{ wallet_balance }} PTS</span></p>
+                {% endif %}
+            </div>
+
+            <div class="err-box" id="errBox"></div>
+
+            <div class="input-group anim" style="animation-delay: 0.1s;">
+                <label>Recipient roll number</label>
+                <input type="text" id="recipientRoll" class="text-input" placeholder="e.g. 5231411207" autocomplete="off">
+            </div>
+
+            <div class="input-group anim" style="animation-delay: 0.15s;">
+                <label>Amount (PTS)</label>
+                <div class="amount-wrapper">
+                    <span class="amount-symbol">PTS</span>
+                    <input type="number" id="payAmount" class="amount-input" placeholder="0" min="1" step="1" oninput="updateScreen()">
+                </div>
+            </div>
+
+            <div class="input-group anim" style="animation-delay: 0.2s;">
+                <label>Payer card PIN (4 digits)</label>
+                <input type="password" id="cardPin" class="pin-input" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" autocomplete="off" placeholder="••••">
+            </div>
+
+            <div class="input-group anim" style="animation-delay: 0.25s;">
+                <label>Card read method</label>
+                <select class="custom-select" id="readerSelect">
+                    <option value="nfc">Phone NFC (tap card)</option>
+                    <option value="manual">USB / manual UID</option>
+                </select>
+                <p class="hint" id="readerHint">Use NFC on supported Android + Chrome, or switch to manual UID entry.</p>
+            </div>
+
+            <div class="manual-uid anim" id="manualBlock" style="display:none; animation-delay: 0.3s;">
+                <label style="color:var(--text-main);font-size:0.75rem;font-weight:800;text-transform:uppercase;">Card UID</label>
+                <input type="text" id="cardUidManual" placeholder="Paste or type UID from reader" autocomplete="off">
+            </div>
+
+            <button class="btn-pay anim" style="animation-delay: 0.35s;" type="button" id="startBtn" onclick="initiatePayment()">Pay — tap card</button>
+        </div>
+
+        <div class="visual-section anim" style="animation-delay: 0.2s;">
+            <div class="nfc-terminal">
+                <div style="width: 40%; height: 6px; background: var(--input-border); border-radius: 3px;"></div>
+                <div class="terminal-screen">
+                    <div id="screen-idle">
+                        <div style="font-weight:800;font-size:1.5rem;color:var(--text-main);letter-spacing:1px;margin-bottom:5px;">READY</div>
+                        <span style="font-size: 0.75rem; font-weight:600;">ENTER RECIPIENT & AMOUNT</span>
+                    </div>
+                    <div id="screen-active" style="display: none; flex-direction: column; align-items: center;">
+                        <div class="ts-amount" id="displayAmount">0</div>
+                        <div class="ts-status" id="displayStatus">WAITING</div>
+                    </div>
+                </div>
+                <div class="sensor-area" id="sensorRing">
+                    <div class="wave" style="animation-delay: 0s;"></div>
+                    <div class="wave" style="animation-delay: 0.5s;"></div>
+                    <div class="wave" style="animation-delay: 1s;"></div>
+                    <div class="nfc-icon" id="nfcIconEl">📡</div>
+                </div>
+                <div style="font-weight:800; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 2px;">NFC CONTACTLESS</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        const apiUrl = {{ url_for('api_nfc_pay') | tojson }};
+
+        function showErr(msg) {
+            const el = document.getElementById('errBox');
+            el.textContent = msg;
+            el.classList.add('show');
+        }
+        function clearErr() {
+            const el = document.getElementById('errBox');
+            el.classList.remove('show');
+            el.textContent = '';
+        }
+
+        function updateScreen() {
+            const amount = document.getElementById('payAmount').value;
+            const display = document.getElementById('displayAmount');
+            const idle = document.getElementById('screen-idle');
+            const active = document.getElementById('screen-active');
+            const recip = (document.getElementById('recipientRoll').value || '').trim();
+
+            if (amount > 0 && recip) {
+                idle.style.display = 'none';
+                active.style.display = 'flex';
+                display.innerText = amount;
+                document.getElementById('displayStatus').innerText = 'TO ' + recip.toUpperCase();
+            } else if (amount > 0) {
+                idle.style.display = 'none';
+                active.style.display = 'flex';
+                display.innerText = amount;
+                document.getElementById('displayStatus').innerText = 'SET RECIPIENT ROLL';
+            } else {
+                idle.style.display = 'block';
+                active.style.display = 'none';
+            }
+        }
+
+        document.getElementById('recipientRoll').addEventListener('input', updateScreen);
+
+        const readerSelect = document.getElementById('readerSelect');
+        const manualBlock = document.getElementById('manualBlock');
+        const readerHint = document.getElementById('readerHint');
+        readerSelect.onchange = () => {
+            const m = readerSelect.value === 'manual';
+            manualBlock.style.display = m ? 'block' : 'none';
+            readerHint.textContent = m
+                ? 'Type or paste the UID from your USB NFC reader, then press Pay.'
+                : 'Use NFC on supported Android + Chrome, or switch to manual UID entry.';
+        };
+
+        let nfcReader = null;
+        let nfcListening = false;
+
+        async function startNfcScan() {
+            if (typeof NDEFReader === 'undefined') {
+                showErr('NFC not available in this browser. Switch to “USB / manual UID”.');
+                return null;
+            }
+            return new Promise((resolve, reject) => {
+                const ndef = new NDEFReader();
+                const t = setTimeout(() => {
+                    nfcListening = false;
+                    reject(new Error('NFC timeout — try again or use manual UID'));
+                }, 45000);
+                ndef.scan().then(() => {
+                    nfcListening = true;
+                    nfcReader = ndef;
+                    ndef.onreading = (e) => {
+                        clearTimeout(t);
+                        const serial = e.serialNumber || (e.tag && e.tag.serialNumber) || '';
+                        if (serial) {
+                            nfcListening = false;
+                            resolve(serial);
+                        }
+                    };
+                }).catch((err) => {
+                    clearTimeout(t);
+                    reject(err);
+                });
+            });
+        }
+
+        async function postPay(payload) {
+            const res = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) {
+                const err = data.error || ('HTTP ' + res.status);
+                throw new Error(err);
+            }
+            return data;
+        }
+
+        function setUiPaying(scanning, success) {
+            const btn = document.getElementById('startBtn');
+            const sensor = document.getElementById('sensorRing');
+            const statusText = document.getElementById('displayStatus');
+            const icon = document.getElementById('nfcIconEl');
+            sensor.classList.toggle('scanning', scanning);
+            sensor.classList.toggle('success', success);
+            
+            // Re-fetch variables safely if needed or hardcode fallback
+            if (scanning) {
+                statusText.innerText = 'TAP CARD…';
+                statusText.style.color = '#06b6d4'; // cyan-500 equivalent
+                icon.innerText = '📡';
+            }
+            if (success) {
+                statusText.innerText = 'SUCCESS';
+                statusText.style.color = '#16a34a';
+                icon.innerText = '✔';
+            }
+        }
+
+        async function initiatePayment() {
+            clearErr();
+            const recipient_rollno = (document.getElementById('recipientRoll').value || '').trim().toUpperCase();
+            const amount = parseInt(document.getElementById('payAmount').value, 10);
+            const card_pin = document.getElementById('cardPin').value.trim();
+
+            if (!recipient_rollno) { showErr('Enter recipient roll number.'); return; }
+            if (!amount || amount < 1) { showErr('Enter a valid amount (at least 1 PTS).'); return; }
+            if (card_pin.length !== 4 || !/^[0-9]{4}$/.test(card_pin)) { showErr('Card PIN must be exactly 4 digits.'); return; }
+
+            const btn = document.getElementById('startBtn');
+            const mode = readerSelect.value;
+            let card_uid = '';
+
+            btn.disabled = true;
+            document.getElementById('payAmount').disabled = true;
+            document.getElementById('recipientRoll').disabled = true;
+            document.getElementById('cardPin').disabled = true;
+            readerSelect.disabled = true;
+
+            try {
+                if (mode === 'manual') {
+                    card_uid = (document.getElementById('cardUidManual').value || '').trim();
+                    if (!card_uid) {
+                        showErr('Enter card UID or switch to NFC.');
+                        throw new Error('validation');
+                    }
+                    setUiPaying(false, false);
+                    document.getElementById('displayStatus').innerText = 'PROCESSING…';
+                    await postPay({ recipient_rollno, amount, card_uid, card_pin });
+                } else {
+                    btn.innerText = 'Tap card now…';
+                    setUiPaying(true, false);
+                    try {
+                        card_uid = await startNfcScan();
+                    } catch (e) {
+                        showErr(e.message || 'NFC failed');
+                        throw e;
+                    }
+                    setUiPaying(false, false);
+                    document.getElementById('displayStatus').innerText = 'PROCESSING…';
+                    await postPay({ recipient_rollno, amount, card_uid, card_pin });
+                }
+
+                setUiPaying(false, true);
+                btn.innerText = 'Payment successful';
+                btn.style.background = 'var(--success)';
+                alert('Payment successful! ' + amount + ' PTS sent to ' + recipient_rollno + '.');
+                location.reload();
+            } catch (e) {
+                if (e.message !== 'validation') {
+                    if (!document.getElementById('errBox').classList.contains('show')) {
+                        showErr(e.message || 'Payment failed');
+                    }
+                }
+                btn.disabled = false;
+                btn.innerText = 'Pay — tap card';
+                document.getElementById('payAmount').disabled = false;
+                document.getElementById('recipientRoll').disabled = false;
+                document.getElementById('cardPin').disabled = false;
+                readerSelect.disabled = false;
+                setUiPaying(false, false);
+                document.getElementById('nfcIconEl').innerText = '📡';
+                updateScreen();
+            }
+        }
+    </script>
+</body>
+
+</html>

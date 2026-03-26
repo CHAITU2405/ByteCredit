@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Digital Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+            
+            --danger: #ef4444;
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+            
+            --danger: #f87171;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding-bottom: 100px; /* Space for save bar */
+            line-height: 1.6;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-btn:hover { color: var(--text-main); }
+
+        /* --- COMMON STYLES --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: 0.3s;
+            box-shadow: var(--glass-shadow);
+        }
+
+        input, textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: var(--input-bg);
+        }
+
+        label {
+            display: block;
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .resume-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+            gap: 30px;
+            padding: 0 20px;
+            align-items: start;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .photo-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .photo-label {
+            display: block;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 10px auto;
+            position: relative;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid var(--glass-bg);
+            outline: 3px solid var(--primary);
+            background: var(--input-bg);
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .photo-label:hover { transform: scale(1.03); outline-color: var(--indigo-400); }
+
+        .photo-label img { width: 100%; height: 100%; object-fit: cover; }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .photo-label:hover .upload-overlay { opacity: 1; }
+
+        .sidebar-group {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+            width: 100%;
+        }
+        .sidebar-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+
+        .contact-input { margin-bottom: 12px; }
+
+        .link-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px;}
+        .link-icon { font-size: 1.2rem; min-width: 25px; text-align: center; color: var(--primary);}
+
+        /* --- RIGHT CONTENT --- */
+        .main-content { display: flex; flex-direction: column; gap: 30px; }
+
+        .header-card { padding-bottom: 20px; }
+
+        .name-input {
+            font-size: 3rem;
+            font-weight: 900;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin-bottom: 5px;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+
+        .tagline-input {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-weight: 600;
+        }
+
+        .name-input:focus, .tagline-input:focus {
+            border-bottom: 2px solid var(--primary);
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .section-heading {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-heading span { color: var(--primary); font-weight: 900; font-size: 1.5rem; }
+
+        /* Skills */
+        .skills-input-group { display: flex; gap: 12px; margin-bottom: 16px; }
+
+        .btn-add-skill {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .btn-add-skill:hover { background: var(--indigo-500); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+        .skills-container { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .skill-chip {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeInUp 0.3s;
+            font-weight: 700;
+        }
+
+        .skill-remove {
+            cursor: pointer;
+            color: var(--danger);
+            opacity: 0.7;
+            font-weight: 900;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+        .skill-remove:hover { opacity: 1; transform: scale(1.1); }
+
+        /* Projects / Dynamic Items */
+        .project-item {
+            border-left: 4px solid var(--glass-border);
+            padding-left: 20px;
+            margin-bottom: 28px;
+            position: relative;
+            transition: 0.3s;
+            background: transparent;
+            border-radius: 0 12px 12px 0;
+            padding-top: 5px;
+            padding-right: 12px;
+            padding-bottom: 15px;
+        }
+
+        .project-item:hover {
+            border-left-color: var(--primary);
+            background: rgba(15, 23, 42, 0.02);
+        }
+        body.dark-mode .project-item:hover { background: rgba(255, 255, 255, 0.02); }
+
+        .btn-remove-project {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--danger);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-remove-project:hover { background: rgba(239, 68, 68, 0.2); }
+
+        .add-project-btn {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: 2px dashed var(--glass-border);
+            color: var(--text-muted);
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .add-project-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+
+        /* --- SAVE BAR --- */
+        .save-bar {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 20px 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            z-index: 90;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .save-bar > div:last-child {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .save-status { font-size: 0.9rem; color: var(--text-muted); font-weight: 600;}
+
+        .btn-save {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-save:hover {
+            background: var(--indigo-500);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Mobile */
+        @media (max-width: 900px) {
+            .resume-container { grid-template-columns: 1fr; gap: 24px; margin-top: 20px;}
+            .sidebar { order: 0; position: relative; top: 0; width: 100%; }
+            .main-content { order: 1; }
+            .save-bar { width: calc(100% - 30px); padding: 15px; bottom: 15px;}
+            .name-input { font-size: 2.2rem; }
+            .project-item { border-left-width: 2px; padding-left: 15px;}
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="anim">
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a href="/student-dashboard" class="logo">BYTE CREDITS</a>
+        </div>
+        <a href="/student-dashboard" class="back-btn">← Dashboard</a>
+    </nav>
+
+    <form id="resumeForm" onsubmit="saveResume(event)">
+        <div class="resume-container anim">
+
+            <div class="sidebar">
+                <div class="glass-card">
+                    <div class="photo-section">
+                        <label for="img-upload" class="photo-label">
+                            <img id="profile-img" src="{% if photo_url %}{{ url_for('static', filename=photo_url) }}{% else %}https://via.placeholder.com/150{% endif %}" alt="Profile">
+                            <div class="upload-overlay">Change<br>Photo</div>
+                        </label>
+                        <input type="file" id="img-upload" name="photo" style="display: none;" accept="image/*" onchange="loadFile(event)">
+
+                        <div style="color: var(--text-muted); font-size: 0.95rem; font-weight: 700; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">
+                            Roll: {{ rollno }}
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <div class="sidebar-group">
+                            <label>Contact Info</label>
+                            <input type="email" name="email" class="contact-input" value="{{ email }}" placeholder="Email">
+                            <input type="tel" name="phone" class="contact-input" value="{{ phone }}" placeholder="Phone">
+                            <input type="text" name="location" class="contact-input" value="{{ location }}" placeholder="City, Country">
+                        </div>
+
+                        <div class="sidebar-group">
+                            <label>Links</label>
+                            <div class="link-row">
+                                <span class="link-icon">📄</span>
+                                <input type="url" name="linkedin" class="contact-input" style="margin:0" value="{{ linkedin }}" placeholder="LinkedIn URL">
+                            </div>
+                            <div class="link-row">
+                                <span class="link-icon">💻</span>
+                                <input type="url" name="github" class="contact-input" style="margin:0" value="{{ github }}" placeholder="GitHub URL">
+                            </div>
+                            <div class="link-row">
+                                <span class="link-icon">🌐</span>
+                                <input type="url" name="portfolio" class="contact-input" style="margin:0" value="{{ portfolio }}" placeholder="Portfolio URL">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+
+                <div class="glass-card header-card">
+                    <input type="text" class="name-input" value="{{ name }}" placeholder="Your Name" readonly>
+                    <input type="text" name="tagline" class="tagline-input" value="{{ tagline }}" placeholder="Professional Title e.g. Full Stack Developer">
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Professional Summary</div>
+                    <textarea name="summary" rows="4" placeholder="Briefly describe your professional background and goals...">{{ summary }}</textarea>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Technical Skills</div>
+                    <div style="display:grid;grid-template-columns:1fr;gap:20px;">
+                        <div>
+                            <label>Programming Languages</label>
+                            <input type="text" id="sk_prog" placeholder="e.g. Python, Java, C" value="{{ (skills_obj.get('programming_languages') if skills_obj else '') }}">
+                        </div>
+                        <div>
+                            <label>Web Technologies</label>
+                            <input type="text" id="sk_web" placeholder="e.g. HTML, CSS, JavaScript" value="{{ (skills_obj.get('web_technologies') if skills_obj else '') }}">
+                        </div>
+                        <div>
+                            <label>Frameworks & Libraries</label>
+                            <input type="text" id="sk_fw" placeholder="e.g. Flask, React, Bootstrap" value="{{ (skills_obj.get('frameworks_libraries') if skills_obj else '') }}">
+                        </div>
+                        <div>
+                            <label>Tools & Platforms</label>
+                            <input type="text" id="sk_tools" placeholder="e.g. Git, Docker, AWS" value="{{ (skills_obj.get('tools_platforms') if skills_obj else '') }}">
+                        </div>
+                        <div>
+                            <label>Concepts</label>
+                            <input type="text" id="sk_concepts" placeholder="e.g. OOP, DBMS, OS, Networks" value="{{ (skills_obj.get('concepts') if skills_obj else '') }}">
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.85rem;font-weight:600;margin-top:-5px;">
+                            Tip: enter comma-separated values.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Non-Tech Skills</div>
+                    <div class="skills-input-group">
+                        <input type="text" id="nonTechInput" placeholder="Add a skill (e.g. Communication, Leadership)...">
+                        <button type="button" class="btn-add-skill" onclick="addNonTechSkill()">Add</button>
+                    </div>
+                    <input type="hidden" name="non_tech_skills" id="nonTechHidden" value="{{ (non_tech_skills_list or [])|join(', ') }}">
+                    <div class="skills-container" id="nonTechList">
+                        {% for skill in (non_tech_skills_list or []) %}
+                        <div class="skill-chip">{{ skill }} <span class="skill-remove" onclick="removeEl(this)">×</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Projects</div>
+                    <input type="hidden" name="projects" id="projectsHidden" value="">
+                    <div id="projects-container">
+                        {% for proj in projects_list %}
+                        <div class="project-item">
+                            <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                            <div style="margin-bottom: 15px;">
+                                <label>Project Title</label>
+                                <input type="text" class="proj-title" placeholder="Project Name" value="{{ proj.get('title', '') }}">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label>Description</label>
+                                <textarea rows="2" class="proj-desc" placeholder="What did you build?">{{ proj.get('desc', '') }}</textarea>
+                            </div>
+                            <div>
+                                <label>Tech Stack</label>
+                                <input type="text" class="proj-tech" placeholder="Technologies used e.g. React, Node.js" value="{{ proj.get('tech', '') }}">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="add-project-btn" onclick="addNewProject()">+ Add Another Project</button>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Achievements</div>
+                    <div class="skills-input-group">
+                        <input type="text" id="achievementInput" placeholder="Add achievement (e.g. Hackathon Winner, NPTEL Elite)...">
+                        <button type="button" class="btn-add-skill" onclick="addAchievement()">Add</button>
+                    </div>
+                    <input type="hidden" name="achievements" id="achievementsHidden" value="">
+                    <div class="skills-container" id="achievementsList">
+                        {% for a in (achievements_list or []) %}
+                        <div class="skill-chip">{{ a }} <span class="skill-remove" onclick="removeEl(this)">×</span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Education</div>
+                    <div id="education-container">
+                        {% for ed in (education_list or []) %}
+                        <div class="project-item">
+                            <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                            <div style="margin-bottom: 15px;">
+                                <label>Institution</label>
+                                <input type="text" class="edu-institution" placeholder="e.g. University / College name" value="{{ ed.get('institution', '') }}">
+                            </div>
+                            <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                                <div>
+                                    <label>Degree</label>
+                                    <input type="text" class="edu-degree" placeholder="e.g. B.Tech, Intermediate" value="{{ ed.get('degree', '') }}">
+                                </div>
+                                <div>
+                                    <label>Field / major</label>
+                                    <input type="text" class="edu-field" placeholder="e.g. CSE, MPC" value="{{ ed.get('field', '') }}">
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                                <div>
+                                    <label>Duration</label>
+                                    <input type="text" class="edu-duration" placeholder="e.g. 2021 - 2025" value="{{ ed.get('duration', '') }}">
+                                </div>
+                                <div>
+                                    <label>CGPA / % (optional)</label>
+                                    <input type="text" class="edu-grade" placeholder="e.g. 8.5 / 92%" value="{{ ed.get('grade', '') }}">
+                                </div>
+                            </div>
+                            <div>
+                                <label>Details</label>
+                                <textarea rows="2" class="edu-desc" placeholder="Coursework, honors, activities...">{{ ed.get('desc', '') }}</textarea>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="add-project-btn" onclick="addEducation()">+ Add Education</button>
+                </div>
+
+                <div class="glass-card">
+                    <div class="section-heading"><span>//</span> Work Experience</div>
+                    <input type="hidden" name="work_experience" id="workExperienceHidden" value="">
+                    <div id="work-container">
+                        {% for w in (work_experience_list or []) %}
+                        <div class="project-item">
+                            <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                            <div style="margin-bottom: 15px;">
+                                <label>Role / Title</label>
+                                <input type="text" class="work-role" placeholder="e.g. Backend Intern" value="{{ w.get('role', '') }}">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label>Organization</label>
+                                <input type="text" class="work-org" placeholder="e.g. ABC Tech Pvt Ltd" value="{{ w.get('org', '') }}">
+                            </div>
+                            <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                                <div>
+                                    <label>Duration</label>
+                                    <input type="text" class="work-duration" placeholder="e.g. Jan 2025 - Apr 2025" value="{{ w.get('duration', '') }}">
+                                </div>
+                                <div>
+                                    <label>Location</label>
+                                    <input type="text" class="work-location" placeholder="e.g. Hyderabad / Remote" value="{{ w.get('location', '') }}">
+                                </div>
+                            </div>
+                            <div>
+                                <label>Description</label>
+                                <textarea rows="3" class="work-desc" placeholder="Describe your responsibilities and impact...">{{ w.get('desc', '') }}</textarea>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="add-project-btn" onclick="addWorkExperience()">+ Add Work Experience</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="save-bar">
+            <div class="save-status">Last saved: 2 mins ago</div>
+            <div>
+                <label style="color:var(--text-main);font-weight:800;font-size:0.95rem;margin-right:20px;cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;">
+                    <input type="checkbox" id="publicToggle" {% if is_public %}checked{% endif %} style="width:18px;height:18px;margin-right:10px;">
+                    Public profile
+                </label>
+                <button type="button"
+                    id="copyPublicLink"
+                    style="background:transparent; border:2px solid var(--glass-border); color:var(--text-main); cursor:pointer; margin-right:15px; padding:12px 16px; border-radius:12px; font-weight:800; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; transition:0.3s; display:{% if is_public %}inline-block{% else %}none{% endif %};"
+                    onmouseover="this.style.borderColor='var(--primary)'"
+                    onmouseout="this.style.borderColor='var(--glass-border)'"
+                    onclick="copyPublicProfileLink()">Copy Link</button>
+                <button type="button"
+                    style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; margin-right:20px; font-weight:700; font-size:0.95rem; transition:0.3s;"
+                    onmouseover="this.style.color='var(--text-main)'"
+                    onmouseout="this.style.color='var(--text-muted)'"
+                    onclick="window.location.href='/profile/download-pdf'">Download PDF</button>
+                <button type="submit" class="btn-save">Save Profile</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        var loadFile = function (event) {
+            var image = document.getElementById('profile-img');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+        
+        function removeEl(el) {
+            el.parentElement.remove();
+            if (document.getElementById('nonTechHidden')) updateNonTechHidden();
+            if (document.getElementById('achievementsHidden')) updateAchievementsHidden();
+        }
+
+        const projectsContainer = document.getElementById('projects-container');
+        const educationContainer = document.getElementById('education-container');
+        const workContainer = document.getElementById('work-container');
+
+        function addNewProject() {
+            const div = document.createElement('div');
+            div.className = 'project-item anim';
+            div.innerHTML = `
+                <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                <div style="margin-bottom: 15px;">
+                    <label>Project Title</label>
+                    <input type="text" class="proj-title" placeholder="Project Name">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label>Description</label>
+                    <textarea rows="2" class="proj-desc" placeholder="What did you build?"></textarea>
+                </div>
+                <div>
+                    <label>Tech Stack</label>
+                    <input type="text" class="proj-tech" placeholder="Technologies used e.g. React, Node.js">
+                </div>
+            `;
+            projectsContainer.appendChild(div);
+        }
+
+        function addEducation() {
+            const div = document.createElement('div');
+            div.className = 'project-item anim';
+            div.innerHTML = `
+                <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                <div style="margin-bottom: 15px;">
+                    <label>Institution</label>
+                    <input type="text" class="edu-institution" placeholder="e.g. University / College name">
+                </div>
+                <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                    <div>
+                        <label>Degree</label>
+                        <input type="text" class="edu-degree" placeholder="e.g. B.Tech, Intermediate">
+                    </div>
+                    <div>
+                        <label>Field / major</label>
+                        <input type="text" class="edu-field" placeholder="e.g. CSE, MPC">
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                    <div>
+                        <label>Duration</label>
+                        <input type="text" class="edu-duration" placeholder="e.g. 2021 - 2025">
+                    </div>
+                    <div>
+                        <label>CGPA / % (optional)</label>
+                        <input type="text" class="edu-grade" placeholder="e.g. 8.5 / 92%">
+                    </div>
+                </div>
+                <div>
+                    <label>Details</label>
+                    <textarea rows="2" class="edu-desc" placeholder="Coursework, honors, activities..."></textarea>
+                </div>
+            `;
+            educationContainer.appendChild(div);
+        }
+
+        function addWorkExperience() {
+            const div = document.createElement('div');
+            div.className = 'project-item anim';
+            div.innerHTML = `
+                <button type="button" class="btn-remove-project" onclick="removeEl(this)">Remove</button>
+                <div style="margin-bottom: 15px;">
+                    <label>Role / Title</label>
+                    <input type="text" class="work-role" placeholder="e.g. Backend Intern">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label>Organization</label>
+                    <input type="text" class="work-org" placeholder="e.g. ABC Tech Pvt Ltd">
+                </div>
+                <div style="margin-bottom: 15px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                    <div>
+                        <label>Duration</label>
+                        <input type="text" class="work-duration" placeholder="e.g. Jan 2025 - Apr 2025">
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <input type="text" class="work-location" placeholder="e.g. Hyderabad / Remote">
+                    </div>
+                </div>
+                <div>
+                    <label>Description</label>
+                    <textarea rows="3" class="work-desc" placeholder="Describe your responsibilities and impact..."></textarea>
+                </div>
+            `;
+            workContainer.appendChild(div);
+        }
+
+        function updateNonTechHidden() {
+            const chips = document.querySelectorAll('#nonTechList .skill-chip');
+            const vals = Array.from(chips).map(c => c.childNodes[0].textContent.trim());
+            document.getElementById('nonTechHidden').value = vals.join(', ');
+        }
+
+        function updateAchievementsHidden() {
+            const chips = document.querySelectorAll('#achievementsList .skill-chip');
+            const vals = Array.from(chips).map(c => c.childNodes[0].textContent.trim());
+            document.getElementById('achievementsHidden').value = JSON.stringify(vals);
+        }
+
+        const nonTechInput = document.getElementById('nonTechInput');
+        const nonTechList = document.getElementById('nonTechList');
+        const achievementInput = document.getElementById('achievementInput');
+        const achievementsList = document.getElementById('achievementsList');
+
+        nonTechInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') { e.preventDefault(); addNonTechSkill(); } });
+        achievementInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') { e.preventDefault(); addAchievement(); } });
+
+        function addNonTechSkill() {
+            const val = nonTechInput.value.trim();
+            if (val) {
+                const chip = document.createElement('div');
+                chip.className = 'skill-chip';
+                chip.innerHTML = val + ' <span class="skill-remove" onclick="removeEl(this)">×</span>';
+                nonTechList.appendChild(chip);
+                nonTechInput.value = '';
+                updateNonTechHidden();
+            }
+        }
+
+        function addAchievement() {
+            const val = achievementInput.value.trim();
+            if (val) {
+                const chip = document.createElement('div');
+                chip.className = 'skill-chip';
+                chip.innerHTML = val + ' <span class="skill-remove" onclick="removeEl(this)">×</span>';
+                achievementsList.appendChild(chip);
+                achievementInput.value = '';
+                updateAchievementsHidden();
+            }
+        }
+
+        function saveResume(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-save');
+            const status = document.querySelector('.save-status');
+            
+            updateNonTechHidden();
+            updateAchievementsHidden();
+            
+            const projectItems = document.querySelectorAll('#projects-container .project-item');
+            const projects = Array.from(projectItems).map(item => ({
+                title: (item.querySelector('.proj-title') || {}).value || '',
+                desc: (item.querySelector('.proj-desc') || {}).value || '',
+                tech: (item.querySelector('.proj-tech') || {}).value || ''
+            }));
+            
+            const workItems = document.querySelectorAll('#work-container .project-item');
+            const workExperience = Array.from(workItems).map(item => ({
+                role: (item.querySelector('.work-role') || {}).value || '',
+                org: (item.querySelector('.work-org') || {}).value || '',
+                duration: (item.querySelector('.work-duration') || {}).value || '',
+                location: (item.querySelector('.work-location') || {}).value || '',
+                desc: (item.querySelector('.work-desc') || {}).value || ''
+            }));
+            
+            const eduItems = document.querySelectorAll('#education-container .project-item');
+            const education = Array.from(eduItems).map(item => ({
+                institution: (item.querySelector('.edu-institution') || {}).value || '',
+                degree: (item.querySelector('.edu-degree') || {}).value || '',
+                field: (item.querySelector('.edu-field') || {}).value || '',
+                duration: (item.querySelector('.edu-duration') || {}).value || '',
+                grade: (item.querySelector('.edu-grade') || {}).value || '',
+                desc: (item.querySelector('.edu-desc') || {}).value || ''
+            }));
+            
+            const formData = new FormData();
+            formData.append('tagline', document.querySelector('[name="tagline"]').value);
+            formData.append('summary', document.querySelector('[name="summary"]').value);
+            formData.append('skills_programming_languages', (document.getElementById('sk_prog') || {}).value || '');
+            formData.append('skills_web_technologies', (document.getElementById('sk_web') || {}).value || '');
+            formData.append('skills_frameworks_libraries', (document.getElementById('sk_fw') || {}).value || '');
+            formData.append('skills_tools_platforms', (document.getElementById('sk_tools') || {}).value || '');
+            formData.append('skills_concepts', (document.getElementById('sk_concepts') || {}).value || '');
+            formData.append('non_tech_skills', document.getElementById('nonTechHidden').value);
+            formData.append('projects', JSON.stringify(projects));
+            formData.append('achievements', document.getElementById('achievementsHidden').value || '[]');
+            formData.append('work_experience', JSON.stringify(workExperience));
+            formData.append('education', JSON.stringify(education));
+            formData.append('location', document.querySelector('[name="location"]').value);
+            formData.append('linkedin', document.querySelector('[name="linkedin"]').value);
+            formData.append('github', document.querySelector('[name="github"]').value);
+            formData.append('portfolio', document.querySelector('[name="portfolio"]').value);
+            formData.append('email', document.querySelector('[name="email"]').value);
+            formData.append('phone', document.querySelector('[name="phone"]').value);
+            
+            const publicToggle = document.getElementById('publicToggle');
+            formData.append('is_public', publicToggle && publicToggle.checked ? '1' : '0');
+            
+            const photoInput = document.getElementById('img-upload');
+            if (photoInput.files && photoInput.files[0]) formData.append('photo', photoInput.files[0]);
+            
+            btn.innerHTML = "Saving...";
+            
+            fetch('/profile', { method: 'POST', body: formData, credentials: 'same-origin' })
+                .then(async (r) => {
+                    let data = null;
+                    try { data = await r.json(); } 
+                    catch (e) {
+                        const txt = await r.text().catch(() => '');
+                        return { ok: false, error: (r.status ? ('HTTP ' + r.status + ' ') : '') + (txt ? txt.slice(0, 180) : 'Non-JSON response') };
+                    }
+                    if (!r.ok) return { ok: false, error: data && data.error ? data.error : ('HTTP ' + r.status) };
+                    return data;
+                })
+                .then(data => {
+                    btn.innerHTML = "Save Profile";
+                    status.innerHTML = "Last saved: " + new Date().toLocaleTimeString();
+                    if (data.ok) {
+                        alert("Profile saved!");
+                        window.location.reload();
+                    } else {
+                        alert(data.error || "Save failed.");
+                    }
+                })
+                .catch(() => { 
+                    btn.innerHTML = "Save Profile"; 
+                    alert("Network error. Please check if you are still logged in, and that the photo is not too large."); 
+                });
+        }
+
+        function copyPublicProfileLink() {
+            const url = window.location.origin + '/p/{{ rollno }}';
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied: ' + url);
+            }).catch(() => {
+                prompt('Copy this link:', url);
+            });
+        }
+
+        const publicToggle = document.getElementById('publicToggle');
+        const copyBtn = document.getElementById('copyPublicLink');
+        updateAchievementsHidden();
+        
+        if (publicToggle && copyBtn) {
+            publicToggle.addEventListener('change', () => {
+                copyBtn.style.display = publicToggle.checked ? 'inline-block' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

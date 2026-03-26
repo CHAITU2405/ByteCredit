@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | {{ title }}</title>
+    <style>
+        :root { --bg-dark: #190933; --glass-border: rgba(191, 172, 200, 0.2); --neon: #517664; --text-main: #f8fafc; --text-muted: #cbc0d3; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: var(--text-main); }
+        .box { background: rgba(102, 86, 135, 0.4); border: 1px solid var(--glass-border); border-radius: 16px; padding: 40px; text-align: center; max-width: 400px; }
+        h1 { font-size: 1.5rem; margin-bottom: 12px; }
+        p { color: var(--text-muted); margin-bottom: 24px; }
+        a { color: var(--neon); text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>{{ title }}</h1>
+        {% if name %}<p style="color:var(--text-main);margin-bottom:12px;">Hi, {{ name }}</p>{% endif %}
+        <p>{{ message }}</p>
+        <a href="/student-dashboard">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Assignment Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+
+            --success: #16a34a;
+            --danger: #ef4444;
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+
+            --success: #4ade80;
+            --danger: #f87171;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding-bottom: 50px;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-btn {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-btn:hover { color: var(--text-main); }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* --- HEADER --- */
+        .task-header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+
+        .task-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 800;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+        }
+
+        /* --- GRID LAYOUT --- */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+        }
+
+        /* Shared Panel Styles */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 800;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        /* --- LEFT COLUMN: POD/TEAM --- */
+        .pod-panel { height: fit-content; }
+
+        .member-list { list-style: none; }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .member-item:hover { border-color: var(--primary); }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .member-info { display: flex; flex-direction: column; }
+        .m-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main);}
+        .m-role { font-size: 0.8rem; color: var(--text-muted); font-weight: 500;}
+
+        /* --- RIGHT COLUMN: WORKSPACE --- */
+        .study-area textarea {
+            width: 100%;
+            height: 250px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 16px;
+            color: var(--text-main);
+            padding: 20px;
+            font-size: 1.05rem;
+            margin-top: 20px;
+            resize: vertical;
+            outline: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .study-area textarea::placeholder { color: var(--text-muted); font-weight: 500; }
+
+        .study-area textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: var(--input-bg);
+        }
+
+        .submission-zone {
+            margin-top: 35px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .btn-action {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: var(--indigo-500);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--input-bg);
+            color: var(--text-main);
+            border: 2px solid var(--input-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(15, 23, 42, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        body.dark-mode .btn-secondary:hover { background: rgba(255, 255, 255, 0.05); }
+
+        /* --- JOIN POD VIEW --- */
+        .join-input {
+            padding: 16px 20px;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 12px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-main);
+            margin-bottom: 25px;
+            margin-top: 10px;
+            font-size: 1.05rem;
+            outline: none;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .join-input::placeholder { color: var(--text-muted); font-weight: 500;}
+
+        .join-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: var(--input-bg);
+        }
+
+        .btn-join {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-join:hover { 
+            transform: translateY(-3px);
+            background: var(--indigo-500); 
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+            .workspace-grid { grid-template-columns: 1fr; }
+            .pod-panel { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="anim">
+        <div style="display:flex;align-items:center;">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <a href="/student-dashboard" class="logo">BYTE CREDITS</a>
+        </div>
+        <a href="/assignments-list" class="back-btn">← Back to Assignments</a>
+    </nav>
+
+    <div class="container anim">
+
+        <div class="task-header">
+            <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <div class="tag" id="subjectTag" style="margin-bottom: 12px; display: inline-block;">Loading...</div>
+                    <h1 id="assignTitle">Loading Assignment...</h1>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: var(--danger); font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px;">Due: <span id="dueDate">--</span></div>
+                </div>
+            </div>
+            <div class="task-meta" style="margin-top: 15px;">
+                <span id="teamType">👤 Individual Task</span>
+            </div>
+        </div>
+
+        <div id="contentArea"></div>
+
+    </div>
+
+    <input type="file" id="fileUpload" style="display: none;" onchange="alert('File Selected: ' + this.files[0].name)">
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        // 1. SIMULATE DATABASE
+        const assignmentsDB = {
+            1: {
+                title: "Build a Portfolio Website", subject: "Web Technologies", date: "2024-12-20",
+                type: "Individual", desc: "Create a personal portfolio using HTML/CSS/JS.",
+                joined: true // SIMULATION: User has joined/started this one
+            },
+            2: {
+                title: "Subnetting Project", subject: "Computer Networks", date: "2024-12-18",
+                type: "Team (Max 4)", desc: "Design a network topology for a 3-floor building.",
+                joined: false // SIMULATION: User has NOT joined a pod yet
+            }
+        };
+
+        // 2. GET ID FROM URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const assignId = urlParams.get('id') || 1; // Default to 1 for demo
+        const data = assignmentsDB[assignId] || assignmentsDB[1];
+
+        // 3. POPULATE HEADER
+        document.getElementById('subjectTag').innerText = data.subject;
+        document.getElementById('assignTitle').innerText = data.title;
+        document.getElementById('dueDate').innerText = data.date;
+        document.getElementById('teamType').innerText = data.type;
+
+        // 4. RENDER VIEW LOGIC
+        const contentArea = document.getElementById('contentArea');
+
+        if (!data.joined) {
+            // --- VIEW A: NOT JOINED (Join Pod Interface) ---
+            contentArea.innerHTML = `
+                <div class="glass-panel anim" style="text-align: center; padding: 60px 40px;">
+                    <h2 style="color: var(--text-main); margin-bottom: 12px; font-weight: 900; font-size: 2rem; letter-spacing: -0.5px;">You haven't joined a Pod yet</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.05rem; font-weight: 500;">To start working on <b style="color: var(--text-main);">"${data.title}"</b>, form a squad or join an existing one.</p>
+                    
+                    <div>
+                        <input type="text" class="join-input" placeholder="Enter Pod Code or Create Name...">
+                        <br>
+                        <button class="btn-join" onclick="joinPod()">🚀 Join / Create Pod</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            // --- VIEW B: JOINED (Workspace) ---
+            contentArea.innerHTML = `
+                <div class="workspace-grid anim">
+                    
+                    <div class="glass-panel pod-panel">
+                        <div class="panel-title">My Pod Members</div>
+                        <ul class="member-list">
+                            <li class="member-item">
+                                <div class="avatar">ME</div>
+                                <div class="member-info"><span class="m-name">{{ name }}</span><span class="m-role">Leader</span></div>
+                            </li>
+                            ${data.type.includes("Team") ? `
+                            <li class="member-item">
+                                <div class="avatar" style="background:var(--primary); color:#fff;">SK</div>
+                                <div class="member-info"><span class="m-name">Sneha K.</span><span class="m-role">Member</span></div>
+                            </li>` : ''}
+                        </ul>
+                        <button class="btn-secondary" style="width:100%; margin-top:15px; padding:12px; border-radius:12px; cursor:pointer; font-weight: 700; transition: 0.3s;">+ Invite Member</button>
+                    </div>
+
+                    <div class="glass-panel work-panel">
+                        <div class="panel-title">Task Workspace</div>
+                        <p style="color:var(--text-main); font-weight: 500; font-size: 1.05rem; line-height:1.6; margin-bottom:25px;">${data.desc}</p>
+                        
+                        <div class="study-area">
+                            <label style="color:var(--text-main); font-weight:800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">📝 Make a Study / Notes</label>
+                            <textarea placeholder="Type your research, draft answers, or findings here..."></textarea>
+                        </div>
+
+                        <div class="submission-zone">
+                            <div style="color:var(--text-muted); font-size:1rem; font-weight: 600;">
+                                <span style="font-size:1.5rem; vertical-align: middle; margin-right: 8px;">📎</span> Attach Final PDF/Zip
+                            </div>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                <button class="btn-action btn-secondary" onclick="document.getElementById('fileUpload').click()">Upload File</button>
+                                <button class="btn-action btn-primary" onclick="submitAssignment()">Submit Assignment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 5. FUNCTIONS
+        function joinPod() {
+            // Simulate joining
+            alert("✅ You have successfully created/joined the Pod!");
+            location.reload(); // In real app, update DB state
+        }
+
+        function submitAssignment() {
+            if (confirm("Are you sure you want to submit your study?")) {
+                alert("🎉 Assignment Submitted Successfully!");
+                window.location.href = "assignments_list.html";
+            }
+        }
+    </script>
+</body>
+</html>

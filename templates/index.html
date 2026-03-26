@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Central Hub</title>
+    <style>
+        :root {
+            --platinum: #efefefff;
+            --ash-grey: #a9b2acff;
+            --shadow-grey: #221d23ff;
+            --grey-olive: #898980ff;
+            --tea-green: #c5dac1ff;
+
+            --bg-main: var(--platinum);
+            --text-main: var(--shadow-grey);
+            --text-muted: var(--grey-olive);
+            --border-color: var(--ash-grey);
+            --primary: var(--tea-green);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            min-height: 100vh;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* Nav Links Area */
+        .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            /* In case we use <a> tags */
+            display: inline-block;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-login:hover {
+            background: rgba(169, 178, 172, 0.2);
+            border-color: var(--text-muted);
+        }
+
+        .btn-register {
+            background: var(--primary);
+            border: none;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            background: var(--border-color);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            /* Changed from fixed height to padding-based for better spacing control */
+            padding-top: 160px;
+            padding-bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Status Badge inside Hero now */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            background: var(--primary);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            /* Spacing above title */
+        }
+
+        .blink-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            color: var(--text-muted);
+        }
+
+        .hero-highlight {
+            color: var(--text-main);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            /* Reduced space below text */
+        }
+
+        /* Adjusted Arrow */
+        .scroll-indicator {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            /* No longer absolute, sits naturally below text */
+            margin-top: 0px;
+            cursor: pointer;
+        }
+
+        /* --- DASHBOARD GRID --- */
+        .dashboard-section {
+            padding: 20px 8% 100px 8%;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(34, 29, 35, 0.08);
+            border-radius: 20px;
+            padding: 35px;
+            text-decoration: none;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--text-muted);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--bg-main);
+            margin-top: auto;
+        }
+
+        /* --- ANIMATIONS --- */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            nav {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-items {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                padding-top: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo" onclick="window.scrollTo(0,0)">BYTE CREDITS</div>
+
+        <div class="nav-items">
+            <a href="#hub" class="nav-link">Modules</a>
+            <a href="#about" class="nav-link">Architecture</a>
+
+            <a href="/login" class="btn btn-login">Login</a>
+            <a href="/register" class="btn btn-register">Register</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+
+        <div class="status-badge reveal">
+            <div class="blink-dot"></div>
+            System Online (Local)
+        </div>
+
+        <h1 class="reveal">
+            <span>The Future of</span><br>
+            <div class="hero-highlight">Connected Campus</div>
+        </h1>
+
+        <p class="reveal">
+            A centralized, offline-first digital ecosystem.
+            Manage Payments, Library, and Attendance seamlessly with one RFID card.
+        </p>
+
+        <div class="scroll-indicator reveal" onclick="document.getElementById('hub').scrollIntoView()">↓</div>
+    </section>
+
+    <section class="dashboard-section" id="hub">
+        <div class="grid-container">
+            <a href="/register" class="card reveal">
+                <div class="card-icon" style="color: var(--text-main);">🆔</div>
+                <div>
+                    <h3>Student Registration</h3>
+                    <p>Map new RFID tags to student profiles. Create digital wallets and assign access roles.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card reveal" onclick="alert('Wallet: Local DB Connection Required')">
+                <div class="card-icon" style="color: var(--text-main);">💳</div>
+                <div>
+                    <h3>Byte Wallet</h3>
+                    <p>Check balance, view transaction history, and recharge credits at the admin block.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card reveal" onclick="alert('Library: Scanner Required')">
+                <div class="card-icon" style="color: var(--text-main);">📚</div>
+                <div>
+                    <h3>Smart Library</h3>
+                    <p>Issue and return books instantly. Track due dates and fines automatically.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card reveal" onclick="alert('Attendance: Logs Updated')">
+                <div class="card-icon" style="color: var(--text-main);">📅</div>
+                <div>
+                    <h3>Auto Attendance</h3>
+                    <p>View daily entry logs, classroom presence, and monthly attendance reports.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card reveal" onclick="alert('Analytics: Admin Access Only')">
+                <div class="card-icon" style="color: var(--text-main);">📊</div>
+                <div>
+                    <h3>Campus Analytics</h3>
+                    <p>Real-time data on cafeteria spending, library usage, and peak campus hours.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card reveal" onclick="alert('Exam Hall: Access Granted')">
+                <div class="card-icon" style="color: var(--text-main);">📝</div>
+                <div>
+                    <h3>Exam Portal</h3>
+                    <p>Verify Hall Tickets and eligibility status at the exam hall entrance.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer id="about">
+        &copy; 2024 Byte Credits Project. Designed for High-Performance Local Implementation.
+    </footer>
+
+    <script>
+        // Simple Reveal on Scroll
+        window.addEventListener('scroll', reveal);
+
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for (var i = 0; i < reveals.length; i++) {
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                var revealpoint = 150;
+                if (revealtop < windowheight - revealpoint) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        reveal(); // Trigger once
+    </script>
+</body>
+
+</html>

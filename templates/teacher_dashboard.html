@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Faculty Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+            
+            --btn-grad-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.6));
+            --btn-grad-hover: linear-gradient(135deg, #e0e7ff, #cffafe);
+            --btn-border: rgba(255, 255, 255, 0.8);
+            --btn-border-hover: var(--primary);
+
+            --circle-bg: rgba(255, 255, 255, 0.9);
+            --table-hover: rgba(79, 70, 229, 0.05);
+            
+            --pos-amount: #16a34a;
+            --neg-amount: #ef4444;
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --btn-grad-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
+            --btn-grad-hover: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+            --btn-border: rgba(99, 102, 241, 0.2);
+            --btn-border-hover: var(--indigo-400);
+
+            --circle-bg: rgba(15, 23, 42, 0.8);
+            --table-hover: rgba(99, 102, 241, 0.1);
+            
+            --pos-amount: #4ade80;
+            --neg-amount: #f87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding-bottom: 50px;
+            overflow-x: hidden;
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .logout-btn:hover {
+            background: rgba(223, 100, 63, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* --- LAYOUT --- */
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 20px;
+            padding: 30px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+        }
+
+        /* Wallet */
+        .wallet-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .wallet-balance {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--text-main), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .wallet-id {
+            font-family: monospace;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            font-size: 0.95rem;
+        }
+
+        /* Attendance Circle */
+        .attendance-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .attendance-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .attendance-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .circle-wrap {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: conic-gradient(var(--primary) 0%, rgba(99, 102, 241, 0.1) 0%);
+            transition: background 0.1s linear;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .circle-inner {
+            width: 115px;
+            height: 115px;
+            background: var(--circle-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--glass-border);
+            transition: background 0.4s ease;
+        }
+
+        .percent-text {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-top: 5px;
+        }
+
+        .percent-symbol {
+            font-size: 1rem;
+            vertical-align: super;
+            margin-left: 2px;
+            opacity: 0.8;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .circle-inner span:last-child {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* Actions Grid */
+        .actions-section {
+            grid-column: span 2;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: var(--btn-grad-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--btn-border);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        
+        body.dark-mode .action-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.2), transparent);
+        }
+
+        .action-btn:hover::before {
+            left: 150%;
+        }
+
+        .action-btn:hover {
+            background: var(--btn-grad-hover);
+            border-color: var(--btn-border-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-icon {
+            font-size: 2.2rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn:hover .btn-icon {
+            transform: scale(1.1);
+        }
+
+        .btn-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* History */
+        .history-section {
+            grid-column: span 2;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 5px;
+        }
+
+        .transaction-table th {
+            text-align: left;
+            padding: 15px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        .transaction-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        body.dark-mode .transaction-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .transaction-table tbody tr:hover td {
+            background: var(--table-hover);
+            border-radius: 8px;
+        }
+
+        .amount-neg {
+            color: var(--neg-amount);
+            font-weight: 800;
+        }
+
+        .amount-pos {
+            color: var(--pos-amount);
+            font-weight: 800;
+        }
+
+        .t-date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                margin-top: 20px;
+            }
+
+            .wallet-card,
+            .attendance-card,
+            .actions-section,
+            .history-section {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .dashboard-container {
+                padding: 0 20px;
+                gap: 20px;
+            }
+
+            .buttons-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .action-btn {
+                padding: 20px 10px;
+            }
+
+            .btn-text {
+                font-size: 0.8rem;
+            }
+
+            .wallet-balance {
+                font-size: 3rem;
+            }
+
+            .history-section {
+                overflow-x: auto;
+            }
+
+            .transaction-table {
+                min-width: 500px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/teacher-dashboard" class="logo" style="text-decoration:none;">BYTE CREDITS</a>
+        <div class="user-profile">
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+            <span class="user-role">FACULTY</span>
+            <div class="user-name">{{ name }}</div>
+            <button class="logout-btn" type="button" onclick="window.location.href='/logout'">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+
+        <div class="glass-card wallet-card">
+            <div class="wallet-label">Faculty Wallet</div>
+            <div class="wallet-balance"><span id="count-wallet">{{ wallet_balance }}</span> <span
+                    style="font-size: 1.5rem; color: var(--text-muted); -webkit-text-fill-color: initial;">PTS</span></div>
+            <div class="wallet-id">Staff ID: {{ rollno }}</div>
+        </div>
+
+        <div class="glass-card attendance-card">
+            <div class="attendance-info">
+                <h3>My Attendance</h3>
+                <p>Department: <span style="font-weight: bold;">{{ department }}</span></p>
+                <p>Year field: {{ year }} (staff)</p>
+            </div>
+            <div class="circle-wrap" id="circle-ring">
+                <div class="circle-inner">
+                    <span class="percent-text" id="percent-text"><span id="count-attend">{{ attendance_pct|int }}</span><span
+                            class="percent-symbol">%</span></span>
+                    <span>Present</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-section">
+            <div class="section-title">Faculty Controls</div>
+            <div class="buttons-grid">
+
+                <div class="action-btn btn-cls" onclick="window.location.href='/attendance'">
+                    <div class="btn-icon">📋</div>
+                    <div class="btn-text">Take Attendance</div>
+                </div>
+
+                <div class="action-btn btn-pay" onclick="window.location.href='/view-attendance'">
+                    <div class="btn-icon">📊</div>
+                    <div class="btn-text">View Attendance</div>
+                </div>
+
+                <div class="action-btn btn-nfc" onclick="window.location.href='/payment'">
+                    <div class="btn-icon">📡</div>
+                    <div class="btn-text">NFC Transfer</div>
+                </div>
+
+                <div class="action-btn btn-add" onclick="window.location.href='/profile'">
+                    <div class="btn-icon">👤</div>
+                    <div class="btn-text">My Profile</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="glass-card history-section">
+            <div class="section-title">Recent Activity</div>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+                        <th>AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for act in activities %}
+                    <tr>
+                        <td>{{ act.description }}</td>
+                        <td class="t-date">{{ act.created_at }}</td>
+                        <td class="{{ 'amount-pos' if act.amount > 0 else 'amount-neg' }}">{{ act.amount > 0 and '+' or '' }} {{ act.amount }} PTS</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="t-date">No activity yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+            // Re-trigger attendance animation to update colors correctly
+            triggerAttendanceAnimation();
+        }
+
+        // Initialize Theme on Load
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-btn').innerText = '☀️';
+            }
+        }
+        initTheme();
+
+        // --- Animations ---
+        function animateDashboard(walletEnd, attendEnd, duration) {
+            const walletObj = document.getElementById("count-wallet");
+            const attendObj = document.getElementById("count-attend");
+            const circleObj = document.getElementById("circle-ring");
+            const percentTextObj = document.getElementById("percent-text");
+
+            let startTimestamp = null;
+
+            // Get current CSS variables for Dynamic Ring Color
+            const compStyles = getComputedStyle(document.documentElement);
+            const primaryColor = String(compStyles.getPropertyValue('--primary')).trim() || '#4f46e5';
+            const ringBg = document.body.classList.contains('dark-mode') ? 'rgba(99, 102, 241, 0.1)' : 'rgba(79, 70, 229, 0.05)';
+            const textMain = String(compStyles.getPropertyValue('--text-main')).trim() || '#0f172a';
+
+            percentTextObj.style.color = textMain; // reset to main text color rather than threshold
+
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+                // 1. Wallet Counter
+                walletObj.innerText = Math.floor(progress * walletEnd).toLocaleString();
+
+                // 2. Attendance Counter
+                const currAttend = Math.floor(progress * attendEnd);
+                attendObj.innerText = currAttend;
+
+                // 3. Circle Fill Animation (Conic Gradient)
+                const gradientVal = progress * attendEnd;
+                circleObj.style.background = `conic-gradient(${primaryColor} ${gradientVal}%, ${ringBg} 0%)`;
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    walletObj.innerText = walletEnd.toLocaleString();
+                    attendObj.innerText = attendEnd;
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function triggerAttendanceAnimation() {
+            const walletVal = parseInt(document.getElementById("count-wallet").innerText.replace(/,/g, '')) || 0;
+            const attendVal = parseInt(document.getElementById("count-attend").innerText) || 0;
+            animateDashboard(walletVal, attendVal, 1200);
+        }
+
+        window.onload = function () {
+            triggerAttendanceAnimation();
+        };
+    </script>
+
+</body>
+
+</html>

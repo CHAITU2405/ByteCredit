@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Credits | Register Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Indigo/Slate Premium Theme */
+            --indigo-600: #4f46e5;
+            --indigo-500: #6366f1;
+            --indigo-400: #818cf8;
+            --cyan-500: #06b6d4;
+            --cyan-400: #22d3ee;
+            
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+
+            /* Light Theme (Default) */
+            --bg-grad-1: var(--slate-50);
+            --bg-grad-2: #e2e8f0;
+            --bg-grad-3: #cbd5e1;
+            --bg-grad-4: var(--slate-100);
+
+            --text-main: var(--slate-900);
+            --text-muted: var(--slate-700);
+            --primary: var(--indigo-600);
+            --secondary: var(--cyan-500);
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+            --input-bg: #ffffff;
+            --input-border: rgba(15, 23, 42, 0.15);
+
+            --nfc-bg: #ffffff;
+            --nfc-border: var(--slate-400);
+
+            --success: #16a34a;
+            --danger: #ef4444;
+        }
+
+        body.dark-mode {
+            /* Dark Theme Elements */
+            --bg-grad-1: #020617;
+            --bg-grad-2: var(--slate-900);
+            --bg-grad-3: #172033;
+            --bg-grad-4: #0a0f1d;
+
+            --text-main: var(--slate-50);
+            --text-muted: var(--slate-400);
+            
+            --primary: var(--indigo-500);
+            --secondary: var(--cyan-400);
+
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(99, 102, 241, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+            --input-bg: rgba(15, 23, 42, 0.8);
+            --input-border: rgba(99, 102, 241, 0.3);
+
+            --nfc-bg: rgba(30, 41, 59, 0.8);
+            --nfc-border: var(--slate-700);
+
+            --success: #4ade80;
+            --danger: #f87171;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        body {
+            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--bg-grad-4));
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-main);
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .floating-theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .floating-theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .glass-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.4s ease, border-color 0.4s ease;
+            position: relative;
+        }
+
+        h1 { font-size: 1.8rem; margin-bottom: 8px; color: var(--text-main); font-weight: 900; letter-spacing: -0.5px; }
+        p.sub { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5; font-weight: 500; }
+        
+        .input-group { margin-bottom: 24px; }
+        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); margin-bottom: 8px; font-weight: 800; }
+        
+        input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            padding: 16px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(99, 102, 241, 0.2); }
+        input:read-only { background: rgba(15, 23, 42, 0.05); border-color: transparent; opacity: 0.8; }
+        body.dark-mode input:read-only { background: rgba(255, 255, 255, 0.05); border-color: transparent; }
+
+        .nfc-zone {
+            border: 2px dashed var(--nfc-border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            transition: 0.3s;
+            background: var(--nfc-bg);
+        }
+        
+        .nfc-zone.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .nfc-zone.scanned { border-color: var(--success); background: rgba(22, 163, 74, 0.1); }
+        .nfc-zone .icon { font-size: 3rem; margin-bottom: 10px; }
+        .nfc-zone .hint { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
+        .nfc-zone .uid { font-family: monospace; color: var(--success); margin-top: 10px; word-break: break-all; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px;}
+        
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            margin-top: 10px;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); background: var(--indigo-500); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .msg { margin-top: 20px; padding: 15px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; display: none; }
+        .msg.err { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); }
+        .msg.ok { background: rgba(22, 163, 74, 0.1); border: 1px solid var(--success); color: var(--success); }
+        
+        .fallback { margin-top: 12px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;}
+        .fallback a { color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <button class="floating-theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+
+    <div class="glass-container anim">
+        <h1>Register your NFC card</h1>
+        <p class="sub">Link your roll number to your card so you can use it for attendance and payments.</p>
+
+        <form id="cardForm">
+            <div class="input-group">
+                <label>Roll Number</label>
+                <input type="text" id="rollno" value="{{ rollno }}" readOnly>
+            </div>
+
+            <div class="input-group">
+                <label>Card UID (tap card or enter manually)</label>
+                <div class="nfc-zone" id="nfcZone">
+                    <div class="icon">📱</div>
+                    <div class="hint" id="nfcHint">Use a phone with NFC: tap "Start NFC" then hold your card to the back.</div>
+                    <div class="uid" id="uidDisplay"></div>
+                </div>
+                <input type="text" id="card_uid" placeholder="Card UID will appear after tap" required autocomplete="off">
+                <p class="fallback">No NFC? <a id="toggleManual">Enter UID manually</a></p>
+            </div>
+
+            <div class="input-group">
+                <label>Card PIN (4 digits)</label>
+                <input type="password" id="card_pin" placeholder="****" maxlength="4" pattern="\d{4}" required autocomplete="off" style="letter-spacing: 12px; font-weight: bold; text-align: center; font-size: 1.5rem;">
+            </div>
+            <div class="input-group">
+                <label>Confirm card PIN</label>
+                <input type="password" id="card_pin_confirm" placeholder="****" maxlength="4" pattern="\d{4}" required autocomplete="off" style="letter-spacing: 12px; font-weight: bold; text-align: center; font-size: 1.5rem;">
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnSubmit">Register Card</button>
+        </form>
+
+        <div class="msg" id="msg"></div>
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-btn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (document.getElementById('theme-btn')) {
+                    document.getElementById('theme-btn').innerText = '☀️';
+                }
+            }
+        }
+        initTheme();
+
+        const rollno = "{{ rollno }}";
+        const nfcZone = document.getElementById('nfcZone');
+        const nfcHint = document.getElementById('nfcHint');
+        const uidDisplay = document.getElementById('uidDisplay');
+        const cardUidInput = document.getElementById('card_uid');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const msgEl = document.getElementById('msg');
+        const cardForm = document.getElementById('cardForm');
+        const toggleManual = document.getElementById('toggleManual');
+
+        let nfcSupported = typeof NDEFReader !== 'undefined';
+        let nfcStarted = false;
+
+        function showMsg(text, isError) {
+            msgEl.textContent = text;
+            msgEl.className = 'msg ' + (isError ? 'err' : 'ok');
+            msgEl.style.display = 'block';
+        }
+
+        function setUid(uid) {
+            cardUidInput.value = uid;
+            uidDisplay.textContent = uid;
+            nfcZone.classList.add('scanned');
+            nfcHint.textContent = 'Card detected. You can register now.';
+        }
+
+        async function startNfc() {
+            if (!nfcSupported) {
+                nfcHint.textContent = 'NFC not supported in this browser. Use Chrome on Android or enter UID manually.';
+                return;
+            }
+            try {
+                const ndef = new NDEFReader();
+                await ndef.scan();
+                nfcStarted = true;
+                nfcZone.classList.add('active');
+                nfcHint.textContent = 'Hold your NFC card to the back of your phone...';
+                ndef.onreading = (e) => {
+                    const serial = e.serialNumber || (e.tag && e.tag.serialNumber) || '';
+                    if (serial) setUid(serial);
+                };
+            } catch (err) {
+                nfcHint.textContent = 'NFC error: ' + (err.message || 'Permission denied or not available.');
+            }
+        }
+
+        if (nfcSupported) {
+            const startBtn = document.createElement('button');
+            startBtn.type = 'button';
+            startBtn.className = 'btn-submit';
+            startBtn.style.marginTop = '0';
+            startBtn.style.padding = '12px';
+            startBtn.style.fontSize = '0.9rem';
+            startBtn.textContent = 'Start NFC scan';
+            startBtn.onclick = startNfc;
+            nfcZone.appendChild(startBtn);
+        }
+
+        toggleManual.onclick = () => {
+            cardUidInput.placeholder = 'Paste or type card UID';
+            cardUidInput.focus();
+        };
+
+        cardForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const card_uid = cardUidInput.value.trim();
+            const card_pin = document.getElementById('card_pin').value;
+            const card_pin_confirm = document.getElementById('card_pin_confirm').value;
+            if (!card_uid) {
+                showMsg('Tap your card (or enter UID manually) first.', true);
+                return;
+            }
+            if (card_pin.length !== 4 || !/^\d{4}$/.test(card_pin)) {
+                showMsg('Card PIN must be 4 digits.', true);
+                return;
+            }
+            if (card_pin !== card_pin_confirm) {
+                showMsg('Card PIN and confirm do not match.', true);
+                return;
+            }
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Registering...';
+            msgEl.style.display = 'none';
+            try {
+                // Ensure the route accepts the correct payload.
+                const res = await fetch('{{ url_for("register_card") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rollno, card_uid, card_pin }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (data.ok && data.redirect) {
+                    showMsg('Card registered successfully. Redirecting...', false);
+                    window.location.href = data.redirect;
+                    return;
+                }
+                showMsg(data.error || 'Registration failed', true);
+            } catch (err) {
+                showMsg('Network error. Try again.', true);
+            }
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Register Card';
+        };
+    </script>
+</body>
+</html>
